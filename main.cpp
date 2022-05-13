@@ -6,6 +6,6 @@ int main(int argc,char * argv []) {
     auto app =Gtk::Application::create(argc,argv);
     VueG *vg = new VueG();
     vg->set_default_size(700,600);
-    vg->set_title("Jeu du Démineur");
+    vg->set_title("Jeu du Demineur");
     return app->run(*vg);
 }

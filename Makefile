@@ -5,7 +5,7 @@ LDFLAGS = $(GTKMM_LD)        # les options pour l'éditeur de liens
 
 CC = g++          # le compilateur à utiliser
 
-SRC = main.cpp VueG.cpp firstWindow.cpp Dialogue.cpp # les fichiers sources
+SRC = main.cpp VueG.cpp  # les fichiers sources
 PROG = main          # nom de l'exécutable
 OBJS =  $(SRC:.cpp=.o) # les .o qui en découlent
 .SUFFIXES: .cpp .o     # lien entre les suffixes
@@ -18,8 +18,6 @@ all: $(PROG)
 $(PROG): $(OBJS)
 	$(CC)  -o $@ $^ $(LDFLAGS)
 
-firstWindow.o: firstWindow.hpp VueG.hpp
-Dialogue.o: Dialogue.hpp
 VueG.o: VueG.hpp Observateur.hpp firstWindow.hpp Dialogue.hpp choiceWindow.hpp
 main.o: VueG.hpp Modele.hpp Observable.hpp Controleur.hpp  #les options du compilateur
 # le lien entre .o et .c

@@ -11,7 +11,7 @@ private :
   Gtk::Box* boiteV;
   Gtk::Box m_box;
   Gtk::Label commentaire_;
-  Gtk::RadioButtonGroup groupe_; //Création d'un groupe.
+  Gtk::RadioButtonGroup groupe_;
   Gtk::RadioButton option1_, option2_, option3_;
   Gtk::Separator separateur;
   int optionChoisie_;

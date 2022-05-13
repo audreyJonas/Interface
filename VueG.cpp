@@ -17,8 +17,8 @@ VueG::VueG():
   boiteJoueur(false),
   Jeu(false),
   Grille(false),
-  //pseudoJoueur("test"),
   avatarJoueur("Avatars/yoshi3.png")
+  
 {
   /*Creation des differents menus*/
   /*Barre de menu*/
@@ -73,19 +73,15 @@ void VueG::afficherPremierePage() {
   firstWindow introWindow(this);
   introWindow.resize(400,50);
   int reponse = introWindow.run(); //Lancer la boîte de dialogue.
-  if(reponse == Gtk::RESPONSE_OK){
-    introWindow.close();
-  }
-  else if(reponse==Gtk::RESPONSE_HELP){
+  if(reponse==Gtk::RESPONSE_HELP){
     afficherInstructions();
-    
   }
 }
 
 void VueG::afficherDialogue() {
-    //Création de la boîte de dialogue personnalisée.
-    Dialogue dialogue("Nom du joueur", this, "Veuillez entrer votre pseudo :");    
-    int reponse = dialogue.run(); //Lancer la boîte de dialogue.
+  //Création de la boîte de dialogue personnalisée.
+  Dialogue dialogue("Nom du joueur", this, "Veuillez entrer votre pseudo :");
+  int reponse = dialogue.run(); //Lancer la boîte de dialogue.
     
     if(reponse == Gtk::RESPONSE_OK) { //Si l'utilisateur clique sur Valider.
       pseudoJoueur.set_text(dialogue.get_texte());

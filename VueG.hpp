@@ -14,6 +14,7 @@
 #include <gtkmm/menuitem.h>
 #include <gtkmm/separatormenuitem.h>
 #include <gtkmm/imagemenuitem.h>
+#include <gtkmm/messagedialog.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/textview.h>
 
