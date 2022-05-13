@@ -8,7 +8,7 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/window.h>
 
-class Dialogue : public Gtk::Dialog{
+class choiceWindow : public Gtk::Window{
     public :
         Dialogue(std::string titre, Gtk::Window* parent, std::string message);
         std::string get_texte();

@@ -20,7 +20,7 @@ $(PROG): $(OBJS)
 
 firstWindow.o: firstWindow.hpp VueG.hpp
 Dialogue.o: Dialogue.hpp
-VueG.o: VueG.hpp Observateur.hpp firstWindow.hpp Dialogue.hpp
+VueG.o: VueG.hpp Observateur.hpp firstWindow.hpp Dialogue.hpp choiceWindow.hpp
 main.o: VueG.hpp Modele.hpp Observable.hpp Controleur.hpp  #les options du compilateur
 # le lien entre .o et .c
 # $< dernière dépendance	

@@ -18,9 +18,9 @@
 #include <gtkmm/textview.h>
 
 
-
 #include "Observateur.hpp"
 #include "firstWindow.hpp"
+#include "choiceWindow.hpp"
 #include "Dialogue.hpp"
 
 class Controleur;
@@ -46,6 +46,7 @@ public:
   void afficherDialogue();
   void afficherPremierePage();
   void afficherInstructions();
+  void afficherDifficulte();
 };
 
 

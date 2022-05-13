@@ -50,9 +50,10 @@ VueG::VueG():
   /*Gestion des connexions*/
   subItemQuitter.signal_activate().connect(sigc::mem_fun(*this,&VueG::close));
   subItemRegles.signal_activate().connect(sigc::mem_fun(*this,&VueG::afficherInstructions));
-  
+  //subItemDifficulte.signal_activate().connect(sigc::mem_fun(*this,&VueG::afficherDifficulte));
   afficherPremierePage();
   afficherDialogue();
+  afficherDifficulte();
   
   show_all_children();
 }
@@ -93,8 +94,17 @@ void VueG::afficherDialogue() {
 
 
 void VueG::afficherInstructions(){
-  Gtk::MessageDialog winInstruction(*this, "<big><b>Regle du Demineur</b></big>", true);
+  Gtk::MessageDialog winInstruction(*this, "<big><b>Regles du Demineur</b></big>", true);
   winInstruction.set_title("Regles du jeu");
   winInstruction.set_secondary_text("Le champ de mines du Démineur est représenté par une grille, dont la taille varie avec la difficulte. Chaque case de la grille peut soit cacher une mine, soit etre vide. Le but du jeu est de decouvrir toutes les cases libres sans faire exploser les mines, c est-à-dire sans cliquer sur les cases qui les dissimulent.\n\nLorsque vous cliquez sur une case libre comportant au moins une mine dans l une de ses cases avoisinantes, un chiffre apparaît, indiquant ce nombre de mines.Si en revanche toutes les cases adjacentes sont vides, une case vide est affichee et la meme opération est repetee sur ces cases, et ce jusqu a ce que la zone vide soit entierement delimitee par des chiffres.\n\nVous pouvez signaler les cases contenant des mines presumees par un drapeau en cliquant sur le bouton — mais ce n est aucunement obligatoire. Il faut faire attention a ne pas signaler une case saine par un drapeau, car cela peut vous induire en erreur");
   winInstruction.run();
   }
+
+void VueG::afficherDifficulte(){
+  choiceWindow choix(this, "Difficulte","Choisissez la difficulte","Facile","Moyen","Difficile");
+  int reponse = choix.run();
+  if(reponse == Gtk::RESPONSE_OK) {
+      
+    }
+  
+}
