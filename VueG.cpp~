@@ -1,0 +1,75 @@
+#include <iomanip>
+
+#include "VueG.hpp"
+#include "Controleur.hpp"
+
+VueG::VueG():
+  b("Afficher le dialogue")
+{
+  add(boiteV);
+  boiteV.pack_start(b);
+  boiteV.pack_start(etiquette);
+  //b.signal_clicked().connect(sigc::mem_fun(*this,&VueG::afficherDialogue));
+  //introWindow.show();
+  afficherPremierePage();
+  //show_all_children();
+}
+  
+void VueG::update(double &info){
+    info +=1;
+}
+
+void VueG::close(){
+  Gtk::Window::close();
+}
+
+VueG::~VueG(){}
+
+void VueG::afficherPremierePage() {
+    //Création de la boîte de dialogue personnalisée.
+  firstWindow introWindow(this);
+  introWindow.run(); //Lancer la boîte de dialogue.
+
+}
+
+void VueG::afficherDialogue() {
+    //Création de la boîte de dialogue personnalisée.
+    Dialogue dialogue("Boîte de dialogue personnalisée", this, "Veuillez entrer du texte :");
+    //Modifier le texte de la zone de texte par celui de l'étiquette.
+    dialogue.set_texte(etiquette.get_text());
+    
+    int reponse = dialogue.run(); //Lancer la boîte de dialogue.
+    
+    if(reponse == Gtk::RESPONSE_OK) { //Si l'utilisateur clique sur Valider.
+        //Modification du texte de l'étiquette par le texte de la zone de texte de la boîte de dialogue.
+        etiquette.set_text(dialogue.get_texte());
+    }
+}
+
+/*
+double VueG::getDegres() const {
+    std::string saisie = (Gtk::Entry get_text()).c_str();
+
+}
+
+void VueG::setDegres(const double d) {
+    Gtk::Entry set_text(d);
+}
+
+void VueG::update(const double &d) {
+}
+
+VueG::~VueG() {}
+
+void VueG::on_button_close() { }
+
+void VueG::addFahrenheitListener(Controleur *c) {
+    addObserver(c);
+}
+
+void VueG::addCelsiusListener(Controleur *c) {
+}
+
+void VueG::addExitListener(Controleur *c) {
+}
+*/
