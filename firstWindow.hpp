@@ -19,9 +19,6 @@ private:
   Gtk::Box* box1;
   Gtk::HBox box2;
   Gtk::HButtonBox box3;
-  Gtk::Button bInstructions;
-  //Glib::RefPtr<Gtk::TextBuffer> buf1_textPres;
-  //Gtk::TextView zoneTexte;
   Gtk::Label zoneTexte;
   
 public:
@@ -29,6 +26,4 @@ public:
   virtual ~firstWindow();
   void close();
   void suivant();
-  void afficherInstructions();
-
 };
