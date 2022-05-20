@@ -1,5 +1,8 @@
 #include <iomanip>
 #include <cstdio>
+#include <vector>
+#include <iostream>
+#include <cstdlib>
 
 #include "VueG.hpp"
 #include "Controleur.hpp"
@@ -13,12 +16,11 @@ VueG::VueG():
   subItemRegles(Gtk::Stock::HELP),
   subItemDifficulte(Gtk::Stock::PROPERTIES),
   boiteMenu(false),
-  boite2(false),
+  boiteJeu(false),
   boiteJoueur(false),
   Jeu(false),
   Grille(false),
   avatarJoueur("Avatars/yoshi3.png")
-  
 {
   /*Creation des differents menus*/
   /*Barre de menu*/
@@ -42,9 +44,12 @@ VueG::VueG():
   boiteJoueur.pack_start(avatarJoueur);
   boiteJoueur.pack_end(pseudoJoueur,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteMenu,Gtk::PACK_SHRINK);
-  boite2.pack_start(Grille);
-  boite2.pack_end(boiteJoueur);
-  Jeu.pack_start(boite2,Gtk::PACK_SHRINK);
+  Grille.pack_start(GrilleJeu);
+  boite.attach(GrilleJeu,0,1,0,1, Gtk::FILL | Gtk::EXPAND, Gtk::SHRINK);
+  boite.show();
+  boiteJeu.pack_end(boiteJoueur,Gtk::PACK_SHRINK);
+  Jeu.pack_start(boiteJeu,Gtk::PACK_SHRINK);
+  Jeu.pack_start(Grille, Gtk::PACK_SHRINK);
   add(Jeu);
 
   /*Gestion des connexions*/
@@ -54,6 +59,7 @@ VueG::VueG():
   afficherPremierePage();
   afficherDialogue();
   afficherDifficulte();
+  initialiserGrille(10,10);
   
   show_all_children();
 }
@@ -98,9 +104,26 @@ void VueG::afficherInstructions(){
 
 void VueG::afficherDifficulte(){
   choiceWindow choix(this, "Difficulte","Choisissez la difficulte","Facile","Moyen","Difficile");
-  int reponse = choix.run();
-  if(reponse == Gtk::RESPONSE_OK) {
-      
+  choix.run();
+  switch(choix.getOption()){
+  case 1: initialiserGrille(10,10);break;
+  case 2: initialiserGrille(20,20);break;
+  case 3: initialiserGrille(30,30);break;
+  }
+}
+void VueG::initialiserGrille(const int M, const int N){
+  GrilleJeu.set_row_homogeneous(true);
+  GrilleJeu.set_column_homogeneous(true);
+  for(int i=0; i<M; i++){
+    for(int j=0; j<N; j++){
+      auto btn = new Mine();
+      btn->set_ligne(i);
+      btn->set_colonne(j);
+      v.push_back(btn);
     }
-  
+  }
+  for(auto el: v){
+    GrilleJeu.attach(*el,el->get_ligne(),el->get_colonne());
+    el->show();
+  }
 }

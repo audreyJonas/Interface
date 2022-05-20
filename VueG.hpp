@@ -17,12 +17,14 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/textview.h>
-
+#include <gtkmm/table.h>
+#include <vector>
 
 #include "Observateur.hpp"
 #include "firstWindow.hpp"
 #include "choiceWindow.hpp"
 #include "Dialogue.hpp"
+#include "Mine.hpp"
 
 class Controleur;
 
@@ -34,10 +36,13 @@ private:
   Gtk::Menu Menu,Aide,Parametres;
   Gtk::ImageMenuItem subItemFichierScores,subItemQuitter,subItemRegles,subItemDifficulte;
   Gtk::SeparatorMenuItem separateur;
-  Gtk::HBox boiteMenu,boite2;
+  Gtk::HBox boiteMenu,boiteJeu;
   Gtk::VBox boiteJoueur,Jeu,Grille;
   Gtk::Label pseudoJoueur;
   Gtk::Image avatarJoueur;
+  Gtk::Grid GrilleJeu;
+  Gtk::Table boite;
+  std::vector<Mine*> v;
   
 public:
   VueG();
@@ -48,6 +53,7 @@ public:
   void afficherPremierePage();
   void afficherInstructions();
   void afficherDifficulte();
+  void initialiserGrille(const int M, const int N);
 };
 
 

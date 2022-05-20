@@ -1,5 +1,8 @@
 #include <iomanip>
 #include <cstdio>
+#include <vector>
+#include <iostream>
+#include <cstdlib>
 
 #include "VueG.hpp"
 #include "Controleur.hpp"
@@ -13,12 +16,12 @@ VueG::VueG():
   subItemRegles(Gtk::Stock::HELP),
   subItemDifficulte(Gtk::Stock::PROPERTIES),
   boiteMenu(false),
-  boite2(false),
+  boiteJeu(false),
   boiteJoueur(false),
   Jeu(false),
   Grille(false),
-  //pseudoJoueur("test"),
   avatarJoueur("Avatars/yoshi3.png")
+  // GrilleJeu(2,3,false),
 {
   /*Creation des differents menus*/
   /*Barre de menu*/
@@ -42,18 +45,20 @@ VueG::VueG():
   boiteJoueur.pack_start(avatarJoueur);
   boiteJoueur.pack_end(pseudoJoueur,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteMenu,Gtk::PACK_SHRINK);
-  boite2.pack_start(Grille);
-  boite2.pack_end(boiteJoueur);
-  Jeu.pack_start(boite2,Gtk::PACK_SHRINK);
+  boiteJeu.pack_start(Grille);
+  boiteJeu.pack_end(boiteJoueur);
+  Jeu.pack_start(boiteJeu,Gtk::PACK_SHRINK);
+  initialiserGrille(2,3);
+  Jeu.pack_start(GrilleJeu);//,Gtk::PACK_SHRINK);
   add(Jeu);
 
   /*Gestion des connexions*/
   subItemQuitter.signal_activate().connect(sigc::mem_fun(*this,&VueG::close));
   subItemRegles.signal_activate().connect(sigc::mem_fun(*this,&VueG::afficherInstructions));
-  subItemDifficulte.signal_activate().connect(sigc::mem_fun(*this,&VueG::afficherDifficulte));
+  //subItemDifficulte.signal_activate().connect(sigc::mem_fun(*this,&VueG::afficherDifficulte));
   afficherPremierePage();
   afficherDialogue();
-  afficherSelection();
+  afficherDifficulte();
   
   show_all_children();
 }
@@ -73,19 +78,15 @@ void VueG::afficherPremierePage() {
   firstWindow introWindow(this);
   introWindow.resize(400,50);
   int reponse = introWindow.run(); //Lancer la boîte de dialogue.
-  if(reponse == Gtk::RESPONSE_OK){
-    introWindow.close();
-  }
-  else if(reponse==Gtk::RESPONSE_HELP){
+  if(reponse==Gtk::RESPONSE_HELP){
     afficherInstructions();
-    
   }
 }
 
 void VueG::afficherDialogue() {
-    //Création de la boîte de dialogue personnalisée.
-    Dialogue dialogue("Nom du joueur", this, "Veuillez entrer votre pseudo :");    
-    int reponse = dialogue.run(); //Lancer la boîte de dialogue.
+  //Création de la boîte de dialogue personnalisée.
+  Dialogue dialogue("Nom du joueur", this, "Veuillez entrer votre pseudo :");
+  int reponse = dialogue.run(); //Lancer la boîte de dialogue.
     
     if(reponse == Gtk::RESPONSE_OK) { //Si l'utilisateur clique sur Valider.
       pseudoJoueur.set_text(dialogue.get_texte());
@@ -94,12 +95,33 @@ void VueG::afficherDialogue() {
 
 
 void VueG::afficherInstructions(){
-  Gtk::MessageDialog winInstruction(*this, "<big><b>Regle du Demineur</b></big>", true);
+  Gtk::MessageDialog winInstruction(*this, "<big><b>Regles du Demineur</b></big>", true);
   winInstruction.set_title("Regles du jeu");
   winInstruction.set_secondary_text("Le champ de mines du Démineur est représenté par une grille, dont la taille varie avec la difficulte. Chaque case de la grille peut soit cacher une mine, soit etre vide. Le but du jeu est de decouvrir toutes les cases libres sans faire exploser les mines, c est-à-dire sans cliquer sur les cases qui les dissimulent.\n\nLorsque vous cliquez sur une case libre comportant au moins une mine dans l une de ses cases avoisinantes, un chiffre apparaît, indiquant ce nombre de mines.Si en revanche toutes les cases adjacentes sont vides, une case vide est affichee et la meme opération est repetee sur ces cases, et ce jusqu a ce que la zone vide soit entierement delimitee par des chiffres.\n\nVous pouvez signaler les cases contenant des mines presumees par un drapeau en cliquant sur le bouton — mais ce n est aucunement obligatoire. Il faut faire attention a ne pas signaler une case saine par un drapeau, car cela peut vous induire en erreur");
   winInstruction.run();
   }
 
-void VueG::afficherDifficulté(){
-  
+void VueG::afficherDifficulte(){
+  choiceWindow choix(this, "Difficulte","Choisissez la difficulte","Facile","Moyen","Difficile");
+  int reponse = choix.run();
+  if(reponse == Gtk::RESPONSE_OK) {
+    }
+}
+
+void VueG::initialiserGrille(const int M, const int N){
+  for(int i=0; i<M; i++){
+    for(int j=0; j<N; j++){
+      auto btn = new Mine();
+      btn->set_ligne(i);
+      btn->set_colonne(j);
+      v.push_back(btn);
+    }
+  }
+  for(auto el: v){
+    GrilleJeu.attach(*el,el->get_ligne(),(el->get_ligne())+1,el->get_colonne(),(el->get_colonne())+1);
+    el->show();
+    std::cout<<"l: " << el->get_ligne() << " c: " << el->get_colonne() << std::endl;
+  }
+ 
+
 }

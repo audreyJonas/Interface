@@ -34,17 +34,4 @@ public:
 
   ~firstWindow(){}
 
-  /*
-   *Role: Ferme la fenêtre 
-   */
-  void close(){
-    Gtk::Window::close();
-  }
-
-  /*
-   *Role: 
-   */
-  void suivant(){
-    Gtk::Window::close();
-  }
 };

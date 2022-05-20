@@ -1,0 +1,19 @@
+#include "gtkmm.h"
+#include "gtkmm/togglebutton.h"
+#include <vector>
+
+class Mine: public Gtk::ToggleButton{
+private:
+    int ligne;
+    int colonne;
+    MinesweeperGame *game;
+    std::vector<MineToggleButton*> *tiles;
+
+public:
+   void set_row(int l{
+     this->ligne = l;
+   }
+
+  void set_column(int c){
+    this-> colonne=c;
+  }
