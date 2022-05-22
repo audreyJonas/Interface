@@ -62,10 +62,25 @@ VueG::VueG():
   show_all_children();
 }
   
-void VueG::update(std::vector<std::string> &info){
+void VueG::update(std::vector<std::string> &info, int& res){
   auto grille=this->get_casesGrille();
   for(auto i=0; i<info.size(); i++){
     grille[i]->set_label(info[i]);
+    if(info[i]!="#"){
+      grille[i]->set_sensitive(false);
+    }
+  }
+  if(res == 0){
+    Gtk::MessageDialog winInstruction(*this, "Vous avez perdu", false,Gtk::MESSAGE_INFO,Gtk::BUTTONS_OK_CANCEL);
+    winInstruction.set_title("Fin du jeu");
+    winInstruction.set_secondary_text("Aie attention aux bombes! Vous gagnerez surement la prochaine fois.");
+    winInstruction.run();
+  }
+  else if(res==-1){
+    Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_INFO,Gtk::BUTTONS_OK_CANCEL);
+    winInstruction.set_title("Fin du jeu");
+    winInstruction.set_secondary_text("FELICITATIONS !!! N hesitez pas a rejouer en augmentant la difficulte");
+    winInstruction.run();
   }
   
 }
@@ -122,24 +137,26 @@ void VueG::initialiserGrille(const int M, const int N){
       btn->set_ligne(i);
       btn->set_colonne(j);
       casesGrille.push_back(btn);
+      btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &VueG::testActive),btn->get_ligne(),btn->get_colonne(),M));
+      GrilleJeu.attach(*btn,btn->get_colonne(),btn->get_ligne());
+      btn->show();
+      //btn->set_sensitive(false);
     }
   }
-  for(auto el: casesGrille){
-    GrilleJeu.attach(*el,el->get_colonne(),el->get_ligne());
-    el->show();
-  }
+  Controleur::on_play_button(M);
 }
 
 void VueG::addGridListener(Controleur* c){
   for(auto wid: casesGrille){
     (*wid).signal_clicked().connect(sigc::bind(sigc::mem_fun(*c, &Controleur::on_gridBox_button),(*wid).get_ligne(),(*wid).get_colonne()));
-     (*wid).signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &VueG::testActive),(*wid).get_ligne(),(*wid).get_colonne()));
+   
   }
   
 }
 
-void VueG::testActive(Mine m){
-  m.set_active();
+void VueG::testActive(int l, int c,int M){
+  auto caseCliquee =casesGrille[l*M+c];
+  caseCliquee->set_sensitive(false);
   
 }
 std::vector<Mine*> VueG::get_casesGrille(){

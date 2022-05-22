@@ -29,7 +29,10 @@
 
 class Controleur;
 
-class VueG : public Gtk::Window, public Observateur<std::vector<std::string>> {
+class VueG : public Gtk::Window, public Observateur<std::vector<std::string>,int> {
+
+public:
+  int Difficulte;
 
 private:
   Gtk::MenuBar barreMenu;
@@ -42,19 +45,24 @@ private:
   Gtk::Label pseudoJoueur;
   Gtk::Image avatarJoueur;
   Gtk::Grid GrilleJeu;
+  Gtk::Button bJouer;
   std::vector<Mine*> casesGrille;
+  
+  
   
 public:
   VueG();
   virtual ~VueG();
   void close();
-  void update(std::vector<std::string> &info);
+  void update(std::vector<std::string> &info, int& res);
   void afficherDialogue();
   void afficherPremierePage();
   void afficherInstructions();
   void afficherDifficulte();
   void initialiserGrille(const int M, const int N);
   void addGridListener(Controleur* c);
+  //void addBoutonJouerListener(Controleur* c);
+  //void hide_button_play();
   void testActive(int l, int c, int M);
   std::vector<Mine*> get_casesGrille();
   

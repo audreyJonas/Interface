@@ -7,7 +7,7 @@
 int main(int argc,char * argv []) {
     auto app =Gtk::Application::create(argc,argv);
 
-    Demineur *m=new Demineur(10);
+    Demineur *m=new Demineur();
     VueG *vg = new VueG();
     Controleur *c = new Controleur(m,vg);
     m->ajouterObservateur(vg);

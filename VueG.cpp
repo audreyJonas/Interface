@@ -16,11 +16,12 @@ VueG::VueG():
   subItemRegles(Gtk::Stock::HELP),
   subItemDifficulte(Gtk::Stock::PROPERTIES),
   boiteMenu(false),
-  boiteJeu(false),
+  boiteJeu(true),
   boiteJoueur(false),
   Jeu(false),
   Grille(false),
-  avatarJoueur("Avatars/yoshi3.png")
+  avatarJoueur("Avatars/yoshi3.png"),
+  bJouer("Jouer")
 {
   /*Creation des differents menus*/
   /*Barre de menu*/
@@ -44,7 +45,9 @@ VueG::VueG():
   boiteJoueur.pack_start(avatarJoueur);
   boiteJoueur.pack_end(pseudoJoueur,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteMenu,Gtk::PACK_SHRINK);
+  //Jeu.pack_start(bJouer);
   Grille.pack_start(GrilleJeu);
+  //boiteJeu.pack_start(bJouer,Gtk::PACK_SHRINK);
   boiteJeu.pack_end(boiteJoueur,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteJeu,Gtk::PACK_SHRINK);
   Jeu.pack_start(Grille, Gtk::PACK_SHRINK);
@@ -53,22 +56,31 @@ VueG::VueG():
   /*Gestion des connexions*/
   subItemQuitter.signal_activate().connect(sigc::mem_fun(*this,&VueG::close));
   subItemRegles.signal_activate().connect(sigc::mem_fun(*this,&VueG::afficherInstructions));
-  //subItemDifficulte.signal_activate().connect(sigc::mem_fun(*this,&VueG::afficherDifficulte));
   afficherPremierePage();
   afficherDialogue();
-  afficherDifficulte();
-  initialiserGrille(10,10);
-  
+  afficherDifficulte();  
   show_all_children();
 }
   
-void VueG::update(std::vector<std::string> &info){
+void VueG::update(std::vector<std::string> &info, int& res){
   auto grille=this->get_casesGrille();
   for(auto i=0; i<info.size(); i++){
-    grille[i]->set_label(info[i]);
     if(info[i]!="#"){
+      grille[i]->set_label(info[i]);
       grille[i]->set_sensitive(false);
     }
+  }
+  if(res == 0){
+    Gtk::MessageDialog winInstruction(*this, "Vous avez perdu", false,Gtk::MESSAGE_INFO,Gtk::BUTTONS_OK_CANCEL);
+    winInstruction.set_title("Fin du jeu");
+    winInstruction.set_secondary_text("Aie attention aux bombes! Vous gagnerez surement la prochaine fois.");
+    winInstruction.run();
+  }
+  else if(res==-1){
+    Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_INFO,Gtk::BUTTONS_OK_CANCEL);
+    winInstruction.set_title("Fin du jeu");
+    winInstruction.set_secondary_text("FELICITATIONS !!! N hesitez pas a rejouer en augmentant la difficulte");
+    winInstruction.run();
   }
   
 }
@@ -111,11 +123,13 @@ void VueG::afficherDifficulte(){
   choiceWindow choix(this, "Difficulte","Choisissez la difficulte","Facile","Moyen","Difficile");
   choix.run();
   switch(choix.getOption()){
-  case 1: initialiserGrille(10,10);break;
-  case 2: initialiserGrille(20,20);break;
-  case 3: initialiserGrille(30,30);break;
+  case 1:this->Difficulte=10;break;
+  case 2: this->Difficulte=20;break;
+  case 3: this->Difficulte=30;break;
   }
+  initialiserGrille(this->Difficulte,this->Difficulte);
 }
+
 void VueG::initialiserGrille(const int M, const int N){
   GrilleJeu.set_row_homogeneous(true);
   GrilleJeu.set_column_homogeneous(true);
@@ -126,21 +140,16 @@ void VueG::initialiserGrille(const int M, const int N){
       btn->set_colonne(j);
       casesGrille.push_back(btn);
       btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &VueG::testActive),btn->get_ligne(),btn->get_colonne(),M));
-      //btn->set_sensitive(false);
+      GrilleJeu.attach(*btn,btn->get_colonne(),btn->get_ligne());
+      btn->show();
     }
-  }
-  for(auto el: casesGrille){
-    GrilleJeu.attach(*el,el->get_colonne(),el->get_ligne());
-    el->show();
-  }
+  } 
 }
 
 void VueG::addGridListener(Controleur* c){
   for(auto wid: casesGrille){
     (*wid).signal_clicked().connect(sigc::bind(sigc::mem_fun(*c, &Controleur::on_gridBox_button),(*wid).get_ligne(),(*wid).get_colonne()));
-   
-  }
-  
+  }  
 }
 
 void VueG::testActive(int l, int c,int M){
@@ -148,6 +157,7 @@ void VueG::testActive(int l, int c,int M){
   caseCliquee->set_sensitive(false);
   
 }
+
 std::vector<Mine*> VueG::get_casesGrille(){
   return this->casesGrille;
 }

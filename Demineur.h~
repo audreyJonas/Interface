@@ -35,6 +35,9 @@ class Demineur : public Observable<std::vector<std::string>>
         int nb_bombes_ ;
         int nb_case_decouvert_ = 0;
         History game_history_;
+        int partie = 1;
+        int victoire = 1;
+  
 
 
 
@@ -54,6 +57,7 @@ class Demineur : public Observable<std::vector<std::string>>
         int jouer(const int x, const int y);
         int drapeau(const int x, const int y);
         void decouverte (const int x, const int y);
+  void update(const int x, const int y);
 
         void undo();
         void redo();

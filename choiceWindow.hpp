@@ -14,7 +14,7 @@ private :
   Gtk::RadioButtonGroup groupe_;
   Gtk::RadioButton option1_, option2_, option3_;
   Gtk::Separator separateur;
-  int optionChoisie_;
+  int optionChoisie_=1;
 
 public :
   choiceWindow(Gtk::Window* parent, std::string titre, std::string commentaire, std::string option1, std::string option2, std::string option3):

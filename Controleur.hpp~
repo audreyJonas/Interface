@@ -24,11 +24,11 @@ public:
       m->poser_bombe(l,c);
       premier_coup=0;
     }
-    m->jouer(l,c);
-    m->affichage();
-    
-	     //v->get_casesGrille().caseCourante.get_ligne(), v->casesGrille.caseCourante.get_colonne());
-    //notifiterObservateur(statut);
+    m->update(l,c);	     
+  }
+
+  void on_play_button(int difficulte){
+    m->configDemineur(difficulte);
   }
 
 
