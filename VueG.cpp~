@@ -21,7 +21,6 @@ VueG::VueG():
   Jeu(false),
   Grille(false),
   avatarJoueur("Avatars/yoshi3.png")
-  // GrilleJeu(2,3,false),
 {
   /*Creation des differents menus*/
   /*Barre de menu*/
@@ -45,11 +44,10 @@ VueG::VueG():
   boiteJoueur.pack_start(avatarJoueur);
   boiteJoueur.pack_end(pseudoJoueur,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteMenu,Gtk::PACK_SHRINK);
-  boiteJeu.pack_start(Grille);
-  boiteJeu.pack_end(boiteJoueur);
+  Grille.pack_start(GrilleJeu);
+  boiteJeu.pack_end(boiteJoueur,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteJeu,Gtk::PACK_SHRINK);
-  initialiserGrille(2,3);
-  Jeu.pack_start(GrilleJeu);//,Gtk::PACK_SHRINK);
+  Jeu.pack_start(Grille, Gtk::PACK_SHRINK);
   add(Jeu);
 
   /*Gestion des connexions*/
@@ -59,12 +57,17 @@ VueG::VueG():
   afficherPremierePage();
   afficherDialogue();
   afficherDifficulte();
+  initialiserGrille(10,10);
   
   show_all_children();
 }
   
-void VueG::update(double &info){
-    info +=1;
+void VueG::update(std::vector<std::string> &info){
+  auto grille=this->get_casesGrille();
+  for(auto i=0; i<info.size(); i++){
+    grille[i]->set_label(info[i]);
+  }
+  
 }
 
 void VueG::close(){
@@ -103,25 +106,39 @@ void VueG::afficherInstructions(){
 
 void VueG::afficherDifficulte(){
   choiceWindow choix(this, "Difficulte","Choisissez la difficulte","Facile","Moyen","Difficile");
-  int reponse = choix.run();
-  if(reponse == Gtk::RESPONSE_OK) {
-    }
+  choix.run();
+  switch(choix.getOption()){
+  case 1: initialiserGrille(10,10);break;
+  case 2: initialiserGrille(20,20);break;
+  case 3: initialiserGrille(30,30);break;
+  }
 }
-
 void VueG::initialiserGrille(const int M, const int N){
+  GrilleJeu.set_row_homogeneous(true);
+  GrilleJeu.set_column_homogeneous(true);
   for(int i=0; i<M; i++){
     for(int j=0; j<N; j++){
       auto btn = new Mine();
       btn->set_ligne(i);
       btn->set_colonne(j);
-      v.push_back(btn);
+      casesGrille.push_back(btn);
     }
   }
-  for(auto el: v){
-    GrilleJeu.attach(*el,el->get_ligne(),(el->get_ligne())+1,el->get_colonne(),(el->get_colonne())+1);
+  for(auto el: casesGrille){
+    GrilleJeu.attach(*el,el->get_ligne(),el->get_colonne());
     el->show();
-    std::cout<<"l: " << el->get_ligne() << " c: " << el->get_colonne() << std::endl;
   }
- 
-
 }
+
+void VueG::addGridListener(Controleur* c){
+  for(auto wid: casesGrille){
+    //(*wid).signal_clicked().connect([&wid](){Controleur::on_gridBox_button((*wid).get_ligne(),(*wid).get_colonne());});
+    (*wid).signal_clicked().connect(sigc::bind(sigc::mem_fun(*c, &Controleur::on_gridBox_button),(*wid).get_ligne(),(*wid).get_colonne()));
+  }
+  
+}
+
+std::vector<Mine*> VueG::get_casesGrille(){
+  return this->casesGrille;
+}
+

@@ -19,6 +19,7 @@
 #include <gtkmm/textview.h>
 #include <gtkmm/table.h>
 #include <vector>
+#include <cstring>
 
 #include "Observateur.hpp"
 #include "firstWindow.hpp"
@@ -28,7 +29,7 @@
 
 class Controleur;
 
-class VueG : public Gtk::Window, public Observateur<double> {
+class VueG : public Gtk::Window, public Observateur<std::vector<std::string>> {
 
 private:
   Gtk::MenuBar barreMenu;
@@ -41,19 +42,21 @@ private:
   Gtk::Label pseudoJoueur;
   Gtk::Image avatarJoueur;
   Gtk::Grid GrilleJeu;
-  Gtk::Table boite;
-  std::vector<Mine*> v;
+  std::vector<Mine*> casesGrille;
   
 public:
   VueG();
   virtual ~VueG();
   void close();
-  void update(double &info);
+  void update(std::vector<std::string> &info);
   void afficherDialogue();
   void afficherPremierePage();
   void afficherInstructions();
   void afficherDifficulte();
   void initialiserGrille(const int M, const int N);
+  void addGridListener(Controleur* c);
+  std::vector<Mine*> get_casesGrille();
+  
 };
 
 

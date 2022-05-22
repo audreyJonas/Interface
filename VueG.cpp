@@ -45,8 +45,6 @@ VueG::VueG():
   boiteJoueur.pack_end(pseudoJoueur,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteMenu,Gtk::PACK_SHRINK);
   Grille.pack_start(GrilleJeu);
-  boite.attach(GrilleJeu,0,1,0,1, Gtk::FILL | Gtk::EXPAND, Gtk::SHRINK);
-  boite.show();
   boiteJeu.pack_end(boiteJoueur,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteJeu,Gtk::PACK_SHRINK);
   Jeu.pack_start(Grille, Gtk::PACK_SHRINK);
@@ -64,8 +62,12 @@ VueG::VueG():
   show_all_children();
 }
   
-void VueG::update(double &info){
-    info +=1;
+void VueG::update(std::vector<std::string> &info){
+  auto grille=this->get_casesGrille();
+  for(auto i=0; i<info.size(); i++){
+    grille[i]->set_label(info[i]);
+  }
+  
 }
 
 void VueG::close(){
@@ -119,11 +121,24 @@ void VueG::initialiserGrille(const int M, const int N){
       auto btn = new Mine();
       btn->set_ligne(i);
       btn->set_colonne(j);
-      v.push_back(btn);
+      casesGrille.push_back(btn);
     }
   }
-  for(auto el: v){
-    GrilleJeu.attach(*el,el->get_ligne(),el->get_colonne());
+  for(auto el: casesGrille){
+    GrilleJeu.attach(*el,el->get_colonne(),el->get_ligne());
     el->show();
   }
 }
+
+void VueG::addGridListener(Controleur* c){
+  for(auto wid: casesGrille){
+    //(*wid).signal_clicked().connect([&wid](){Controleur::on_gridBox_button((*wid).get_ligne(),(*wid).get_colonne());});
+    (*wid).signal_clicked().connect(sigc::bind(sigc::mem_fun(*c, &Controleur::on_gridBox_button),(*wid).get_ligne(),(*wid).get_colonne()));
+  }
+  
+}
+
+std::vector<Mine*> VueG::get_casesGrille(){
+  return this->casesGrille;
+}
+

@@ -41,7 +41,7 @@ private:
   Gtk::Label pseudoJoueur;
   Gtk::Image avatarJoueur;
   Gtk::Grid GrilleJeu;
-  std::vector<Mine*> v;
+  std::vector<Mine*> casesGrille;
   
 public:
   VueG();
@@ -53,6 +53,9 @@ public:
   void afficherInstructions();
   void afficherDifficulte();
   void initialiserGrille(const int M, const int N);
+  void addGridListener(Controleur* c);
+  std::vector<Mine*> get_casesGrille();
+  
 };
 
 

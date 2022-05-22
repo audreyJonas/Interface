@@ -18,7 +18,7 @@ all: $(PROG)
 $(PROG): $(OBJS)
 	$(CC)  -o $@ $^ $(LDFLAGS)
 
-VueG.o: VueG.hpp Observateur.hpp firstWindow.hpp Dialogue.hpp choiceWindow.hpp
+VueG.o: VueG.hpp Observateur.hpp firstWindow.hpp Dialogue.hpp choiceWindow.hpp Mine.hpp
 main.o: VueG.hpp Modele.hpp Observable.hpp Controleur.hpp  #les options du compilateur
 # le lien entre .o et .c
 # $< dernière dépendance	
