@@ -125,19 +125,23 @@ void VueG::initialiserGrille(const int M, const int N){
     }
   }
   for(auto el: casesGrille){
-    GrilleJeu.attach(*el,el->get_ligne(),el->get_colonne());
+    GrilleJeu.attach(*el,el->get_colonne(),el->get_ligne());
     el->show();
   }
 }
 
 void VueG::addGridListener(Controleur* c){
   for(auto wid: casesGrille){
-    //(*wid).signal_clicked().connect([&wid](){Controleur::on_gridBox_button((*wid).get_ligne(),(*wid).get_colonne());});
     (*wid).signal_clicked().connect(sigc::bind(sigc::mem_fun(*c, &Controleur::on_gridBox_button),(*wid).get_ligne(),(*wid).get_colonne()));
+     (*wid).signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &VueG::testActive),(*wid).get_ligne(),(*wid).get_colonne()));
   }
   
 }
 
+void VueG::testActive(Mine m){
+  m.set_active();
+  
+}
 std::vector<Mine*> VueG::get_casesGrille(){
   return this->casesGrille;
 }

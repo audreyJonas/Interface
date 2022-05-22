@@ -75,15 +75,15 @@ void Demineur::affichage() {
 }
 
 void Demineur::affichage_final() {
-  std::vetor<std::string> valeur;
+  std::vector<std::string> valeur;
 
     for (int ligne=1 ; ligne <= difficulte_ ; ++ligne) {
         for (int colonne=1 ; colonne <= difficulte_ ; ++colonne) {
-	  valeur.push_back(" ");
+	  //valeur.push_back(" ");
             if (Mon_jeu_[ligne][colonne].nb_bombe_ >= je_suis_une_bombe) {
-	      valeur.push_back("-");
+	      valeur.push_back("B");
                 }
-            else if ((Mon_jeu_[ligne][colonne].nb_bombe_ <= je_suis_une_bombe) & (Mon_jeu_[ligne][colonne].nb_bombe_ > 0)) {
+            else if ((Mon_jeu_[ligne][colonne].nb_bombe_ < je_suis_une_bombe) & (Mon_jeu_[ligne][colonne].nb_bombe_ >= 0)) {
 	      valeur.push_back(to_string(Mon_jeu_[ligne][colonne].nb_bombe_));
             }
         }
@@ -117,7 +117,11 @@ int Demineur::jouer(const int x, const int y){
 
     ++game_history_.tour_actuelle;
     ++game_history_.tour_total;
-    return 1;
+    
+    if(nb_case_decouvert_ < difficulte_*difficulte_ - nb_bombes_ )
+        return 1;
+    else
+        return -1;
 }
 
 int Demineur::drapeau(const int x, const int y){
@@ -308,6 +312,55 @@ void Demineur::decouverte (const int x, const int y){
 
 }
 
+void Demineur::update(const int x, const int y){
+  // int difficulte_choisie;
+  // int no_death_mode=1;
+  //  int nb_bombes =0;
+  // int classic_game_mode = 1;
+
+//Dialogue, choix de difficulte
+//Affichage du tableau des scores
+//Appel du constructeur de démineur avec la difficulte+ nb bombes
+    
+//Question du no_deathMode 
+// Chrono
+//Gestion des erreurs et du no death (case deja decouverte etc)
+    /*   if (premier_coup == 1){
+      Mon_jeu.poser_bombe(x,y);
+      premier_coup=0;
+      }*/
+    partie = this->jouer(x,y);
+    if(partie!=-1 and partie!=0){ //-1 condition du joueur qui a gagné
+      //conditions sur partie
+      this->affichage();
+    }
+    else{
+      //status perdant
+      this->affichage_final();
+      if(partie==0){
+	//renvoie status perdant
+	std::cout<<"status perdant"<<std::endl;
+      }
+      else{
+	//renvoie status gagnant
+      }
+    
+    }
+}
+    //else {
+    
+        //auto duration = ((int) chrono::duration<double, std::milli> (chrono::steady_clock::now() - start).count()/10) / 100.0;
+/*
+        if (no_death_mode ==0){
+            cout <<"Voulez vous enregistrer votre scores ? Y or N --> ";
+            cin >> choix;
+            if (choix == "Y"){
+                score.add_score(Mon_jeu.difficulte_,duration,nb_bombes);
+                score.print_scores(difficulte_choisie);
+            }
+        }
+*/
+  
 
 
 

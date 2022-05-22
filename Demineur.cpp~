@@ -32,7 +32,7 @@ void Demineur::poser_bombe(const int x, const int y){
         bomb_y = ((rand() % difficulte_)+1);
 
 
-	cout << "x :" << bomb_x<< " | y :" << bomb_y << endl;
+	//cout << "x :" << bomb_x<< " | y :" << bomb_y << endl;
         if ((Mon_jeu_[bomb_x][bomb_y].nb_bombe_ != je_suis_une_bombe) & !((bomb_x == (x+1)) & (bomb_y == (y+1)))){
 	  //cout <<"OK"<<endl;
             Mon_jeu_[bomb_x][bomb_y].nb_bombe_ = je_suis_une_bombe;               // la case devient une bombe puis on remplit les case aux alentours
@@ -75,27 +75,20 @@ void Demineur::affichage() {
 }
 
 void Demineur::affichage_final() {
-    std::string valeur;
+  std::vetor<std::string> valeur;
 
-    cout <<"  ";
-    for (int i=0 ; i < difficulte_ ; ++i) {
-        cout << " "<< i ;
-    }
-    cout<< endl<< endl;
     for (int ligne=1 ; ligne <= difficulte_ ; ++ligne) {
-        cout << ligne-1<<"  ";
         for (int colonne=1 ; colonne <= difficulte_ ; ++colonne) {
-            valeur=" ";
+	  valeur.push_back(" ");
             if (Mon_jeu_[ligne][colonne].nb_bombe_ >= je_suis_une_bombe) {
-                    valeur = "-";
+	      valeur.push_back("-");
                 }
             else if ((Mon_jeu_[ligne][colonne].nb_bombe_ <= je_suis_une_bombe) & (Mon_jeu_[ligne][colonne].nb_bombe_ > 0)) {
-                    valeur = to_string(Mon_jeu_[ligne][colonne].nb_bombe_);
+	      valeur.push_back(to_string(Mon_jeu_[ligne][colonne].nb_bombe_));
             }
-            cout << valeur << " ";
         }
-        cout << endl;
     }
+    notifierObservateurs(valeur);
 }
 
 int Demineur::jouer(const int x, const int y){

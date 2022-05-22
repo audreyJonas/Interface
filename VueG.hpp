@@ -55,6 +55,7 @@ public:
   void afficherDifficulte();
   void initialiserGrille(const int M, const int N);
   void addGridListener(Controleur* c);
+  void testActive(int l, int c, int M);
   std::vector<Mine*> get_casesGrille();
   
 };

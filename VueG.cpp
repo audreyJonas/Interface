@@ -66,6 +66,9 @@ void VueG::update(std::vector<std::string> &info){
   auto grille=this->get_casesGrille();
   for(auto i=0; i<info.size(); i++){
     grille[i]->set_label(info[i]);
+    if(info[i]!="#"){
+      grille[i]->set_sensitive(false);
+    }
   }
   
 }
@@ -122,6 +125,8 @@ void VueG::initialiserGrille(const int M, const int N){
       btn->set_ligne(i);
       btn->set_colonne(j);
       casesGrille.push_back(btn);
+      btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &VueG::testActive),btn->get_ligne(),btn->get_colonne(),M));
+      //btn->set_sensitive(false);
     }
   }
   for(auto el: casesGrille){
@@ -132,12 +137,17 @@ void VueG::initialiserGrille(const int M, const int N){
 
 void VueG::addGridListener(Controleur* c){
   for(auto wid: casesGrille){
-    //(*wid).signal_clicked().connect([&wid](){Controleur::on_gridBox_button((*wid).get_ligne(),(*wid).get_colonne());});
     (*wid).signal_clicked().connect(sigc::bind(sigc::mem_fun(*c, &Controleur::on_gridBox_button),(*wid).get_ligne(),(*wid).get_colonne()));
+   
   }
   
 }
 
+void VueG::testActive(int l, int c,int M){
+  auto caseCliquee =casesGrille[l*M+c];
+  caseCliquee->set_sensitive(false);
+  
+}
 std::vector<Mine*> VueG::get_casesGrille(){
   return this->casesGrille;
 }

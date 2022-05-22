@@ -8,6 +8,7 @@ class Controleur {
 private:
   Demineur *m;
   VueG *v;
+  int premier_coup = 1;
   
 public:
 //etablit la connexion entre le modele et la vue 
@@ -17,9 +18,15 @@ public:
     v->addGridListener(this);
   }
 
-  void on_gridBox_button(Glib::RefPtr<Mine>& c){
+  void on_gridBox_button(int l, int c){
     //fonction qui lie le clique sur les boutons à la découverte d'une case
-    m->jouer(c->get_ligne(), c->get_colonne());
+    if (premier_coup == 1){
+      m->poser_bombe(l,c);
+      premier_coup=0;
+    }
+    m->jouer(l,c);
+    m->affichage();
+    
 	     //v->get_casesGrille().caseCourante.get_ligne(), v->casesGrille.caseCourante.get_colonne());
     //notifiterObservateur(statut);
   }
