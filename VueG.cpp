@@ -69,7 +69,9 @@ void VueG::update(std::vector<std::string> &info, int& res){
   for(auto i=0; i<info.size(); i++){
     if(info[i]!="#"){
       grille[i]->set_label(info[i]);
-      grille[i]->set_sensitive(false);
+      if(!this->bDrapeaux.get_active()){
+	grille[i]->set_sensitive(false);
+      }
     }
   }
   if(res == 0){
@@ -161,8 +163,9 @@ void VueG::addBDrapeauxListener(Controleur* c){
 
 void VueG::testActive(int l, int c,int M){
   auto caseCliquee =casesGrille[l*M+c];
-  caseCliquee->set_sensitive(false);
-  
+  if(!this->bDrapeaux.get_active()){
+    caseCliquee->set_sensitive(false);
+  }  
 }
 
 std::vector<Mine*> VueG::get_casesGrille(){
