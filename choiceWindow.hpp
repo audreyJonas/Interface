@@ -35,7 +35,6 @@ public :
     option1_.signal_toggled().connect(sigc::mem_fun(*this, &choiceWindow::setOption1));
     option2_.signal_toggled().connect(sigc::mem_fun(*this, &choiceWindow::setOption2));
     option3_.signal_toggled().connect(sigc::mem_fun(*this, &choiceWindow::setOption3));
-    //add(boiteV);
     show_all_children();
     
   }

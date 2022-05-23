@@ -71,13 +71,13 @@ void VueG::update(std::vector<std::string> &info, int& res){
     }
   }
   if(res == 0){
-    Gtk::MessageDialog winInstruction(*this, "Vous avez perdu", false,Gtk::MESSAGE_INFO,Gtk::BUTTONS_OK_CANCEL);
+    Gtk::MessageDialog winInstruction(*this, "Vous avez perdu", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK_CANCEL);
     winInstruction.set_title("Fin du jeu");
     winInstruction.set_secondary_text("Aie attention aux bombes! Vous gagnerez surement la prochaine fois.");
     winInstruction.run();
   }
   else if(res==-1){
-    Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_INFO,Gtk::BUTTONS_OK_CANCEL);
+    Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK_CANCEL);
     winInstruction.set_title("Fin du jeu");
     winInstruction.set_secondary_text("FELICITATIONS !!! N hesitez pas a rejouer en augmentant la difficulte");
     winInstruction.run();
