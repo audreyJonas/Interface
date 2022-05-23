@@ -7,14 +7,18 @@ Type_history test;
 
 Demineur::Demineur(){}
 
-Demineur::Demineur(const int difficulte,const int mon_nb_bombe): difficulte_(difficulte),nb_bombes_(mon_nb_bombe), Mon_jeu_(){
-    if (nb_bombes_ == 0 ){
-        nb_bombes_ = difficulte_;
-    }
-    Mon_jeu_.resize(difficulte+2);
-    for ( int i = 0; i < difficulte+2; ++i )
-        Mon_jeu_[i].resize(difficulte+2);
+void Demineur::configDemineur(const int difficulte,const int mon_nb_bombe){
+  this->difficulte_=difficulte;
+  this->nb_bombes_=mon_nb_bombe;
+  if (this->nb_bombes_ == 0 ){
+    this->nb_bombes_ = difficulte_;
+  }
+  this->Mon_jeu_.resize(difficulte+2);
+  for (int i = 0; i < difficulte+2; ++i )
+   this-> Mon_jeu_[i].resize(difficulte+2);
+
 }
+
 
 Demineur::~Demineur()
 {
@@ -71,7 +75,7 @@ void Demineur::affichage() {
             }
         }
     }
-    notifierObservateurs(valeur);
+    notifierObservateurs(valeur,1);
 }
 
 void Demineur::affichage_final() {
@@ -88,7 +92,15 @@ void Demineur::affichage_final() {
             }
         }
     }
-    notifierObservateurs(valeur);
+     if(partie==0){
+	//renvoie status perdant
+       notifierObservateurs(valeur,0);
+	std::cout<<"status perdant"<<std::endl;
+      }
+      else{
+	//renvoie status gagnant
+	notifierObservateurs(valeur,-1);
+      }
 }
 
 int Demineur::jouer(const int x, const int y){
@@ -336,15 +348,7 @@ void Demineur::update(const int x, const int y){
     }
     else{
       //status perdant
-      this->affichage_final();
-      if(partie==0){
-	//renvoie status perdant
-	std::cout<<"status perdant"<<std::endl;
-      }
-      else{
-	//renvoie status gagnant
-      }
-    
+      this->affichage_final();    
     }
 }
     //else {

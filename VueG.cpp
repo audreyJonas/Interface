@@ -21,7 +21,8 @@ VueG::VueG():
   Jeu(false),
   Grille(false),
   avatarJoueur("Avatars/yoshi3.png"),
-  bJouer("Jouer")
+  bDrapeaux("Drapeaux")
+ 
 {
   /*Creation des differents menus*/
   /*Barre de menu*/
@@ -41,13 +42,14 @@ VueG::VueG():
   Parametres.append(subItemDifficulte);
 
   /*Gestion des emplacements graphiques*/
+  bDrapeaux.set_active(false);
   boiteMenu.pack_start(barreMenu,Gtk::PACK_SHRINK);
   boiteJoueur.pack_start(avatarJoueur);
   boiteJoueur.pack_end(pseudoJoueur,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteMenu,Gtk::PACK_SHRINK);
   //Jeu.pack_start(bJouer);
+  Grille.pack_start(bDrapeaux);
   Grille.pack_start(GrilleJeu);
-  //boiteJeu.pack_start(bJouer,Gtk::PACK_SHRINK);
   boiteJeu.pack_end(boiteJoueur,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteJeu,Gtk::PACK_SHRINK);
   Jeu.pack_start(Grille, Gtk::PACK_SHRINK);
@@ -151,6 +153,11 @@ void VueG::addGridListener(Controleur* c){
     (*wid).signal_clicked().connect(sigc::bind(sigc::mem_fun(*c, &Controleur::on_gridBox_button),(*wid).get_ligne(),(*wid).get_colonne()));
   }  
 }
+
+void VueG::addBDrapeauxListener(Controleur* c){
+  bDrapeaux.signal_toggled().connect(sigc::mem_fun(*c, &Controleur::on_drapeaux_button));
+}
+
 
 void VueG::testActive(int l, int c,int M){
   auto caseCliquee =casesGrille[l*M+c];

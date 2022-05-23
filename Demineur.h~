@@ -28,7 +28,7 @@ typedef struct{
 
 
 
-class Demineur : public Observable<std::vector<std::string>>
+class Demineur : public Observable<std::vector<std::string>,int>
 {
     public :
         int difficulte_ ;
@@ -48,9 +48,9 @@ class Demineur : public Observable<std::vector<std::string>>
 
     public:
         Demineur();
-        Demineur(const int difficulte, const int mon_nb_bombe=0);
         virtual ~Demineur();
 
+        void configDemineur(const int difficulte, const int mon_nb_bombe=0);
         void poser_bombe(const int x, const int y);
         void affichage();
         void affichage_final();

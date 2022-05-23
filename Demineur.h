@@ -37,6 +37,7 @@ class Demineur : public Observable<std::vector<std::string>,int>
         History game_history_;
         int partie = 1;
         int victoire = 1;
+        int drapeaux=0;
   
 
 

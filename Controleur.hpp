@@ -16,6 +16,7 @@ public:
 
   Controleur(Demineur *mm, VueG *vv) : m(mm), v(vv) {
     v->addGridListener(this);
+    v->addBDrapeauxListener(this);
   }
 
   void on_gridBox_button(int l, int c){
@@ -26,5 +27,11 @@ public:
       premier_coup=0;
     }
     m->update(l,c);	     
+  }
+
+  void on_drapeaux_button(){
+    std::cout<<m->drapeaux<<std::endl;
+    //fonction qui lie le clique sur le bouton Drapeaux au mode drapeau
+    m->drapeaux=!(m->drapeaux);
   }
 };

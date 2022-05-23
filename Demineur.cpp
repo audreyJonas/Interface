@@ -137,16 +137,14 @@ int Demineur::jouer(const int x, const int y){
 }
 
 int Demineur::drapeau(const int x, const int y){
-    cout <<"test"<<endl;
     if (Mon_jeu_[x+1][y+1].etat_ == DRAPEAU){
         Mon_jeu_[x+1][y+1].etat_ = NON_DECOUVERTE;
-        cout <<"test1"<<endl;
         return 1;
     }
     else if (Mon_jeu_[x+1][y+1].etat_ == DECOUVERTE){
         return 4;
     }
-    cout <<"test2"<<endl;
+    //cout <<"test2"<<endl;
     Mon_jeu_[x+1][y+1].etat_ = DRAPEAU;
 
     test.position = make_pair(x+1,y+1);
@@ -341,12 +339,17 @@ void Demineur::update(const int x, const int y){
       Mon_jeu.poser_bombe(x,y);
       premier_coup=0;
       }*/
+  if(!this->drapeaux){
     partie = this->jouer(x,y);
-    if(partie!=-1 and partie!=0){ //-1 condition du joueur qui a gagné
+  }
+  else{
+    partie = this->drapeau(x,y);
+  }
+  if(partie!=-1 and partie!=0){ //-1 condition du joueur qui a gagné
       //conditions sur partie
       this->affichage();
-    }
-    else{
+  }
+  else{
       //status perdant
       this->affichage_final();    
     }

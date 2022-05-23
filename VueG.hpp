@@ -18,6 +18,7 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/table.h>
+#include <gtkmm/checkbutton.h>
 #include <vector>
 #include <cstring>
 
@@ -45,7 +46,7 @@ private:
   Gtk::Label pseudoJoueur;
   Gtk::Image avatarJoueur;
   Gtk::Grid GrilleJeu;
-  Gtk::Button bJouer;
+  Gtk::CheckButton bDrapeaux;
   std::vector<Mine*> casesGrille;
   
   
@@ -61,8 +62,7 @@ public:
   void afficherDifficulte();
   void initialiserGrille(const int M, const int N);
   void addGridListener(Controleur* c);
-  //void addBoutonJouerListener(Controleur* c);
-  //void hide_button_play();
+  void addBDrapeauxListener(Controleur* c);
   void testActive(int l, int c, int M);
   std::vector<Mine*> get_casesGrille();
   
