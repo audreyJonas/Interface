@@ -16,12 +16,14 @@ VueG::VueG():
   subItemRegles(Gtk::Stock::HELP),
   subItemDifficulte(Gtk::Stock::PROPERTIES),
   boiteMenu(false),
-  boiteJeu(true),
+  boiteJeu(false),
+  Grille(false),
   boiteJoueur(false),
   Jeu(false),
-  Grille(false),
   avatarJoueur("Avatars/yoshi3.png"),
-  bDrapeaux("Drapeaux")
+  bDrapeaux("Drapeaux"),
+  bRestart("Nouvelle Partie")
+  // im("icons/flag.png")
  
 {
   /*Creation des differents menus*/
@@ -44,30 +46,34 @@ VueG::VueG():
   /*Gestion des emplacements graphiques*/
   bDrapeaux.set_active(false);
   boiteMenu.pack_start(barreMenu,Gtk::PACK_SHRINK);
-  boiteJoueur.pack_start(avatarJoueur);
+  boiteJoueur.pack_start(avatarJoueur,Gtk::PACK_SHRINK);
   boiteJoueur.pack_end(pseudoJoueur,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteMenu,Gtk::PACK_SHRINK);
   //Jeu.pack_start(bJouer);
   Grille.pack_start(bDrapeaux);
   Grille.pack_start(GrilleJeu);
   boiteJeu.pack_end(boiteJoueur,Gtk::PACK_SHRINK);
+  Jeu.pack_end(bRestart,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteJeu,Gtk::PACK_SHRINK);
   Jeu.pack_start(Grille, Gtk::PACK_SHRINK);
   add(Jeu);
 
+  
   /*Gestion des connexions*/
   subItemQuitter.signal_activate().connect(sigc::mem_fun(*this,&VueG::close));
   subItemRegles.signal_activate().connect(sigc::mem_fun(*this,&VueG::afficherInstructions));
   afficherPremierePage();
   afficherDialogue();
-  afficherDifficulte();  
+  afficherDifficulte();
   show_all_children();
 }
-  
+
 void VueG::update(std::vector<std::string> &info, int& res){
   auto grille=this->get_casesGrille();
   for(auto i=0; i<info.size(); i++){
-    grille[i]->set_label(info[i]);
+    auto img = new Gtk::Image("icons/"+info[i]+".png");
+    grille[i]->set_image(*img);
+      //set_label(info[i]);
     /*if(info[i]!=" "){
       grille[i]->set_label(info[i]);
       /*if(!this->bDrapeaux.get_active()){
@@ -79,13 +85,13 @@ void VueG::update(std::vector<std::string> &info, int& res){
     }*/
   }
   if(res == 0){
-    Gtk::MessageDialog winInstruction(*this, "Vous avez perdu", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK_CANCEL);
+    Gtk::MessageDialog winInstruction(*this, "Vous avez perdu", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
     winInstruction.set_title("Fin du jeu");
-    winInstruction.set_secondary_text("Aie attention aux bombes! Vous gagnerez surement la prochaine fois.");
+    winInstruction.set_secondary_text("Aie attention aux bombes! Vous gagnerez surement la prochaine fois. Pour rejouer cliquez sue Nouvelle partie");
     winInstruction.run();
   }
   else if(res==-1){
-    Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK_CANCEL);
+    Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
     winInstruction.set_title("Fin du jeu");
     winInstruction.set_secondary_text("FELICITATIONS !!! N hesitez pas a rejouer en augmentant la difficulte");
     winInstruction.run();
@@ -164,12 +170,22 @@ void VueG::addBDrapeauxListener(Controleur* c){
   bDrapeaux.signal_toggled().connect(sigc::mem_fun(*c, &Controleur::on_drapeaux_button));
 }
 
+void VueG::addBRestartListener(Controleur* c){
+  bRestart.signal_clicked().connect(sigc::mem_fun(*c, &Controleur::on_restart_button));
+}
 
 void VueG::testActive(int l, int c,int M){
   auto caseCliquee =casesGrille[l*M+c];
   /* if(!this->bDrapeaux.get_active()){
     caseCliquee->set_sensitive(false);
     }*/  
+}
+
+void VueG::resetGrille(){
+  for(auto cell: casesGrille){
+    auto img = new Gtk::Image("icons/0.png");
+    cell->set_image(*img);
+  }
 }
 
 std::vector<Mine*> VueG::get_casesGrille(){

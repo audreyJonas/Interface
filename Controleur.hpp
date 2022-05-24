@@ -17,6 +17,7 @@ public:
   Controleur(Demineur *mm, VueG *vv) : m(mm), v(vv) {
     v->addGridListener(this);
     v->addBDrapeauxListener(this);
+    v->addBRestartListener(this);
   }
 
   void on_gridBox_button(int l, int c){
@@ -32,5 +33,11 @@ public:
   void on_drapeaux_button(){
     //fonction qui lie le clique sur le bouton Drapeaux au mode drapeau
     m->drapeaux=!(m->drapeaux);
+  }
+
+  void on_restart_button(){
+    m->restart();
+    v->resetGrille();
+    premier_coup=1;
   }
 };

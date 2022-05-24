@@ -30,7 +30,6 @@ public:
   }
 
   void on_drapeaux_button(){
-    // std::cout<<m->drapeaux<<std::endl;
     //fonction qui lie le clique sur le bouton Drapeaux au mode drapeau
     m->drapeaux=!(m->drapeaux);
   }

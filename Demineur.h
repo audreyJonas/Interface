@@ -59,6 +59,7 @@ class Demineur : public Observable<std::vector<std::string>,int>
         int drapeau(const int x, const int y);
         void decouverte (const int x, const int y);
   void update(const int x, const int y);
+  void restart();
 
         void undo();
         void redo();

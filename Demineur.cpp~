@@ -38,7 +38,6 @@ void Demineur::poser_bombe(const int x, const int y){
 
 	//cout << "x :" << bomb_x<< " | y :" << bomb_y << endl;
         if ((Mon_jeu_[bomb_x][bomb_y].nb_bombe_ != je_suis_une_bombe) & !((bomb_x == (x+1)) & (bomb_y == (y+1)))){
-	  //cout <<"OK"<<endl;
             Mon_jeu_[bomb_x][bomb_y].nb_bombe_ = je_suis_une_bombe;               // la case devient une bombe puis on remplit les case aux alentours
             ++Mon_jeu_[bomb_x-1][bomb_y-1].nb_bombe_ ;
             ++Mon_jeu_[bomb_x-1][bomb_y].nb_bombe_ ;
@@ -59,7 +58,7 @@ void Demineur::affichage() {
     for (int ligne=1 ; ligne <= difficulte_ ; ++ligne) {
         for (int colonne=1 ; colonne <= difficulte_ ; ++colonne) {
             if (Mon_jeu_[ligne][colonne].etat_ == NON_DECOUVERTE ) {
-	      valeur.push_back("#");
+	      valeur.push_back(" ");
             }
             else if (Mon_jeu_[ligne][colonne].etat_ == DRAPEAU ) {
 	      valeur.push_back("F");
@@ -144,7 +143,6 @@ int Demineur::drapeau(const int x, const int y){
     else if (Mon_jeu_[x+1][y+1].etat_ == DECOUVERTE){
         return 4;
     }
-    //cout <<"test2"<<endl;
     Mon_jeu_[x+1][y+1].etat_ = DRAPEAU;
 
     test.position = make_pair(x+1,y+1);
@@ -368,8 +366,6 @@ void Demineur::update(const int x, const int y){
         }
 */
   
-
-
 
 void Demineur::undo(){
     if (game_history_.tour_actuelle > 0){

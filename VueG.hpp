@@ -41,12 +41,13 @@ private:
   Gtk::Menu Menu,Aide,Parametres;
   Gtk::ImageMenuItem subItemFichierScores,subItemQuitter,subItemRegles,subItemDifficulte;
   Gtk::SeparatorMenuItem separateur;
-  Gtk::HBox boiteMenu,boiteJeu;
-  Gtk::VBox boiteJoueur,Jeu,Grille;
+  Gtk::HBox boiteMenu,boiteJeu,Grille;
+  Gtk::VBox boiteJoueur,Jeu;
   Gtk::Label pseudoJoueur;
   Gtk::Image avatarJoueur;
   Gtk::Grid GrilleJeu;
   Gtk::CheckButton bDrapeaux;
+  Gtk::Button bRestart;
   std::vector<Mine*> casesGrille;
   
   
@@ -63,6 +64,8 @@ public:
   void initialiserGrille(const int M, const int N);
   void addGridListener(Controleur* c);
   void addBDrapeauxListener(Controleur* c);
+  void addBRestartListener(Controleur* c);
+  void resetGrille();
   void testActive(int l, int c, int M);
   std::vector<Mine*> get_casesGrille();
   

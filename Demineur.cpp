@@ -38,7 +38,6 @@ void Demineur::poser_bombe(const int x, const int y){
 
 	//cout << "x :" << bomb_x<< " | y :" << bomb_y << endl;
         if ((Mon_jeu_[bomb_x][bomb_y].nb_bombe_ != je_suis_une_bombe) & !((bomb_x == (x+1)) & (bomb_y == (y+1)))){
-	  //cout <<"OK"<<endl;
             Mon_jeu_[bomb_x][bomb_y].nb_bombe_ = je_suis_une_bombe;               // la case devient une bombe puis on remplit les case aux alentours
             ++Mon_jeu_[bomb_x-1][bomb_y-1].nb_bombe_ ;
             ++Mon_jeu_[bomb_x-1][bomb_y].nb_bombe_ ;
@@ -59,15 +58,14 @@ void Demineur::affichage() {
     for (int ligne=1 ; ligne <= difficulte_ ; ++ligne) {
         for (int colonne=1 ; colonne <= difficulte_ ; ++colonne) {
             if (Mon_jeu_[ligne][colonne].etat_ == NON_DECOUVERTE ) {
-	      valeur.push_back(" ");
+	      valeur.push_back("0");
             }
             else if (Mon_jeu_[ligne][colonne].etat_ == DRAPEAU ) {
-	      valeur.push_back("F");
+	      valeur.push_back("flag");
             }
             else if (Mon_jeu_[ligne][colonne].etat_== DECOUVERTE) {
                 if (Mon_jeu_[ligne][colonne].nb_bombe_ >= je_suis_une_bombe) {
-		  std::cout<<"bombe"<<std::endl;
-		  valeur.push_back("B");
+		  valeur.push_back("mine");
                     }
                 else{
 		  valeur.push_back(to_string(Mon_jeu_[ligne][colonne].nb_bombe_));
@@ -85,7 +83,7 @@ void Demineur::affichage_final() {
         for (int colonne=1 ; colonne <= difficulte_ ; ++colonne) {
 	  //valeur.push_back(" ");
             if (Mon_jeu_[ligne][colonne].nb_bombe_ >= je_suis_une_bombe) {
-	      valeur.push_back("B");
+	      valeur.push_back("mine");
                 }
             else if ((Mon_jeu_[ligne][colonne].nb_bombe_ < je_suis_une_bombe) & (Mon_jeu_[ligne][colonne].nb_bombe_ >= 0)) {
 	      valeur.push_back(to_string(Mon_jeu_[ligne][colonne].nb_bombe_));
@@ -95,7 +93,6 @@ void Demineur::affichage_final() {
      if(partie==0){
 	//renvoie status perdant
        notifierObservateurs(valeur,0);
-	std::cout<<"status perdant"<<std::endl;
       }
       else{
 	//renvoie status gagnant
@@ -366,9 +363,13 @@ void Demineur::update(const int x, const int y){
             }
         }
 */
+
+void Demineur::restart(){
+  (this->Mon_jeu_).erase(this->Mon_jeu_.begin(),this->Mon_jeu_.end());
+  this->nb_case_decouvert_=0;
+  //configDemineur(this->difficulte_,this->nb_bombes_);
   
-
-
+}
 
 void Demineur::undo(){
     if (game_history_.tour_actuelle > 0){
