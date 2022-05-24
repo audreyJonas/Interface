@@ -59,7 +59,7 @@ void Demineur::affichage() {
     for (int ligne=1 ; ligne <= difficulte_ ; ++ligne) {
         for (int colonne=1 ; colonne <= difficulte_ ; ++colonne) {
             if (Mon_jeu_[ligne][colonne].etat_ == NON_DECOUVERTE ) {
-	      valeur.push_back("#");
+	      valeur.push_back(" ");
             }
             else if (Mon_jeu_[ligne][colonne].etat_ == DRAPEAU ) {
 	      valeur.push_back("F");
@@ -144,7 +144,6 @@ int Demineur::drapeau(const int x, const int y){
     else if (Mon_jeu_[x+1][y+1].etat_ == DECOUVERTE){
         return 4;
     }
-    //cout <<"test2"<<endl;
     Mon_jeu_[x+1][y+1].etat_ = DRAPEAU;
 
     test.position = make_pair(x+1,y+1);
