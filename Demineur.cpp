@@ -58,7 +58,7 @@ void Demineur::affichage() {
     for (int ligne=1 ; ligne <= difficulte_ ; ++ligne) {
         for (int colonne=1 ; colonne <= difficulte_ ; ++colonne) {
             if (Mon_jeu_[ligne][colonne].etat_ == NON_DECOUVERTE ) {
-	      valeur.push_back("0");
+	      valeur.push_back("n");
             }
             else if (Mon_jeu_[ligne][colonne].etat_ == DRAPEAU ) {
 	      valeur.push_back("flag");

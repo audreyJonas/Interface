@@ -22,9 +22,7 @@ VueG::VueG():
   Jeu(false),
   avatarJoueur("Avatars/yoshi3.png"),
   bDrapeaux("Drapeaux"),
-  bRestart("Nouvelle Partie")
-  // im("icons/flag.png")
- 
+  bRestart("Nouvelle Partie") 
 {
   /*Creation des differents menus*/
   /*Barre de menu*/
@@ -73,10 +71,13 @@ void VueG::update(std::vector<std::string> &info, int& res){
   for(auto i=0; i<info.size(); i++){
     auto img = new Gtk::Image("icons/"+info[i]+".png");
     grille[i]->set_image(*img);
+    if(info[i]!="n" && info[i]!="flag"){
+	grille[i]->set_sensitive(false);
+	}
       //set_label(info[i]);
     /*if(info[i]!=" "){
       grille[i]->set_label(info[i]);
-      /*if(!this->bDrapeaux.get_active()){
+      if(!this->bDrapeaux.get_active()){
 	grille[i]->set_sensitive(false);
 	}
     }
@@ -174,11 +175,12 @@ void VueG::addBRestartListener(Controleur* c){
   bRestart.signal_clicked().connect(sigc::mem_fun(*c, &Controleur::on_restart_button));
 }
 
+
 void VueG::testActive(int l, int c,int M){
   auto caseCliquee =casesGrille[l*M+c];
-  /* if(!this->bDrapeaux.get_active()){
+   if(!this->bDrapeaux.get_active()){
     caseCliquee->set_sensitive(false);
-    }*/  
+    }  
 }
 
 void VueG::resetGrille(){
