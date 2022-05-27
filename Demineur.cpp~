@@ -14,7 +14,7 @@ void Demineur::configDemineur(const int difficulte,const int mon_nb_bombe){
     this->nb_bombes_ = difficulte_;
   }
   this->Mon_jeu_.resize(difficulte+2);
-  for (int i = 0; i < difficulte+2; ++i )
+  for (int i = 0; i < difficulte+2; ++i)
    this-> Mon_jeu_[i].resize(difficulte+2);
 
 }

@@ -139,12 +139,15 @@ void VueG::afficherInstructions(){
 void VueG::afficherDifficulte(){
   choiceWindow choix(this, "Difficulte","Choisissez la difficulte","Facile","Moyen","Difficile","Choisir");
   choix.run();
+  int difficulte, bombes;
   switch(choix.getOption()){
-  case 1:this->Difficulte=8;;break;
-  case 2: this->Difficulte=14;break;
-  case 3: this->Difficulte=20;break;
-  case 4: this->Difficulte=afficherChoixDimensions();break;
+  case 1:difficulte=8;bombes=8;break;
+  case 2: difficulte=14;bombes=8;break;
+  case 3: difficulte=20;bombes=20;break;
+  case 4: auto diff=afficherChoixDimensions(); difficulte=diff.first;bombes=diff.second;break;
   }
+  this->Difficulte=difficulte;
+  this->Bombes=bombes;
   initialiserGrille(this->Difficulte);
 }
 
@@ -164,10 +167,10 @@ void VueG::afficherFichierScores(){
   
 }
 
-int VueG::afficherChoixDimensions(){
+std::pair<int,int> VueG::afficherChoixDimensions(){
   dimWindow fenetre_dimensions(this,"Dimensions","Nombre de bombes",5,1,20,1);
   fenetre_dimensions.run();
-  return fenetre_dimensions.get_dim();  
+  return make_pair(fenetre_dimensions.get_dim(),fenetre_dimensions.get_bombes());  
 }
 
 void VueG::initialiserGrille(const int M){

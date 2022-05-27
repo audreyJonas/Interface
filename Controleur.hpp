@@ -27,7 +27,7 @@ public:
   void on_gridBox_button(int l, int c){
     //fonction qui lie le clique sur les boutons à la découverte d'une case
     if (premier_coup == 1){
-      m->configDemineur(v->Difficulte);
+      m->configDemineur(v->Difficulte,v->Bombes);
       m->poser_bombe(l,c);
       premier_coup=0;
     }

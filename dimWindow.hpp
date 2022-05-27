@@ -17,7 +17,7 @@ private :
   Gtk::SpinButton boutonDim_;
   Gtk::SpinButton boutonBombes_;
   int dim_=5;
-  int bomb_=dim_;
+  int bomb_=24;
   
 public :
   dimWindow(Gtk::Window* parent, std::string saisie1, std::string saisie2,  int defaut, int min,int max, int step):
@@ -25,7 +25,7 @@ public :
     saisie1_(saisie1),
     saisie2_(saisie2),
     dimensions_(Gtk::Adjustment::create(defaut, min, max, step)),
-    bombes_(Gtk::Adjustment::create(defaut,min,max*max-1,step)),
+    bombes_(Gtk::Adjustment::create(defaut,min,bomb_,step)),
     boutonDim_(dimensions_),
     boutonBombes_(bombes_)   
   {
@@ -44,7 +44,9 @@ public :
   }
   
   void set_dim(){
-    this->dim_= boutonDim_.get_value_as_int();
+    int dim_saisie=boutonDim_.get_value_as_int();
+    boutonBombes_.set_range(1,dim_saisie*dim_saisie-1);
+    this->dim_= dim_saisie;
   }
 
   void set_bombes(){

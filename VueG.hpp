@@ -21,6 +21,7 @@
 #include <gtkmm/checkbutton.h>
 #include <vector>
 #include <cstring>
+#include <utility>
 
 #include "Observateur.hpp"
 #include "firstWindow.hpp"
@@ -34,7 +35,7 @@ class Controleur;
 class VueG : public Gtk::Window, public Observateur<std::vector<std::string>,int> {
 
 public:
-  int Difficulte;
+  int Difficulte, Bombes;
 
 private:
   Gtk::MenuBar barreMenu;
@@ -64,7 +65,7 @@ public:
   void afficherDifficulte();
   int afficherChoixMode();
   void afficherFichierScores();
-  int afficherChoixDimensions();
+  std::pair<int,int> afficherChoixDimensions();
   void initialiserGrille(const int M);
   void addGridListener(Controleur* c);
   void addBDrapeauxListener(Controleur* c);
