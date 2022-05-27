@@ -21,7 +21,6 @@ public:
     v->addBUndoListener(this);
     v->addBRedoListener(this);
     v->addItemModeListener(this);
-    // v->addItemDimensionsListener(this);
   }
 
   void on_gridBox_button(int l, int c){

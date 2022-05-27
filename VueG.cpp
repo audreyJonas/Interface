@@ -77,9 +77,14 @@ void VueG::update(std::vector<std::string> &info, int& res){
   for(auto i=0; i<info.size(); i++){
     auto img = new Gtk::Image("./Icons/"+info[i]+".png");
     grille[i]->set_image(*img);
-    /*f(info[i]!="n" && info[i]!="flag"){
-	grille[i]->set_sensitive(false);
-	}*/
+    if(info[i]!="n" && info[i]!="flag"){
+      //si une case est découvete et n'est pas un drapeau
+      grille[i]->set_sensitive(false);//elle n'est plus cliquable
+	}
+    else if(info[i]=="n" and (grille[i]->get_active() || !grille[i]->get_sensitive())){
+      //si une case est non découverte mais enfoncée-> undo
+      grille[i]->set_sensitive(true); //elle redevient cliquable
+    }
   }
   if(res == 0){
     Gtk::MessageDialog winInstruction(*this, "Vous avez perdu", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);

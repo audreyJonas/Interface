@@ -185,7 +185,6 @@ void Demineur::decouverte (const int x, const int y){
 };
 
 
-
 void Demineur::update(const int x, const int y){
   if(!this->drapeaux){  //si le joueur joue
       partie = this->jouer(x,y);
@@ -212,9 +211,7 @@ void Demineur::update(const int x, const int y){
 
 void Demineur::restart(){
   (this->Mon_jeu_).erase(this->Mon_jeu_.begin(),this->Mon_jeu_.end());
-  this->nb_case_decouvert_=0;
-  //configDemineur(this->difficulte_,this->nb_bombes_);
-  
+  this->nb_case_decouvert_=0;  
 };
 
 void Demineur::undo(){
