@@ -36,19 +36,19 @@ void Demineur::poser_bombe(const int x, const int y){
         bomb_y = ((rand() % difficulte_)+1);
 
 	//cout<<"Bomb x :" << bomb_x << "|Bomb y : " << bomb_y << endl;
-	if((Mon_jeu_[bomb_x][bomb_y].nb_bombe_!= je_suis_une_bombe) & !((bomb_x == (x+1)) & (bomb_y == (y+1)))){
-	  Mon_jeu_[bomb_x][bomb_y].nb_bombe_ = je_suis_une_bombe;
-	  for(int i=bomb_x-1; i<=bomb_x+1;++i){
-	    for(int j=bomb_y-1; j<=bomb_y+1;++j){
-	      if (!(bomb_x == i & bomb_y==j)){
-		++Mon_jeu_[i][j].nb_bombe_;
-	      }
-	    }
-	  }
-	}
-        else                                                                       // si la case est deja une bombe, on annule l'iteration
+	if((Mon_jeu_[bomb_x][bomb_y].nb_bombe_ < je_suis_une_bombe) & !((bomb_x == (x+1)) & (bomb_y == (y+1)))){
+          Mon_jeu_[bomb_x][bomb_y].nb_bombe_ = je_suis_une_bombe;
+          for(int i=bomb_x-1; i<=bomb_x+1;++i){
+            for(int j=bomb_y-1; j<=bomb_y+1;++j){
+                ++Mon_jeu_[i][j].nb_bombe_;
+            }
+          }
+        }
+        else{                                                                       // si la case est deja une bombe, on annule l'iteration
             ++nb_bombes;
+        }
     }
+
     //cout<<endl<<endl;
 };
 
@@ -109,12 +109,7 @@ void Demineur::affichage_final() {
 int Demineur::jouer(const int x, const int y){
     if (Mon_jeu_[x+1][y+1].nb_bombe_ >= je_suis_une_bombe)
         return 0;
-    /*else if (Mon_jeu_[x+1][y+1].etat_ == DECOUVERTE)
-        return 2;
-
-    else if(Mon_jeu_[x+1][y+1].etat_ == DRAPEAU)
-        return 3;
-    */
+ 
     else if (Mon_jeu_[x+1][y+1].nb_bombe_ != 0) {
         Mon_jeu_[x+1][y+1].etat_ = DECOUVERTE;
 
@@ -162,20 +157,17 @@ int Demineur::drapeau(const int x, const int y){
 
 
 void Demineur::decouverte (const int x, const int y){
-   if (Mon_jeu_[x][y].etat_ == NON_DECOUVERTE ){
-     if (Mon_jeu_[x][y].nb_bombe_ < 9 ){
+   if ((Mon_jeu_[x][y].etat_ == NON_DECOUVERTE)&(Mon_jeu_[x][y].nb_bombe_ < 9 )){
        Mon_jeu_[x][y].etat_ = DECOUVERTE;
        test.position = make_pair(x,y);
        test.etat_=DECOUVERTE;
        game_history_.add_modif(test);
        ++nb_case_decouvert_;
-     }
    }
 
    for(int i=x-1; i<=x+1;++i){
      for(int j=y-1; j<=y+1;++j){
-       if ( !(x == i & y == j)){
-	 if (Mon_jeu_[i][j].etat_ == NON_DECOUVERTE){
+        if ( !((x == i) & (y == j)) & (Mon_jeu_[i][j].etat_ == NON_DECOUVERTE)){
 	   if ((Mon_jeu_[i][j].nb_bombe_ == 0) & (i > 0) & (j > 0) & (i < difficulte_ +1) & (j < difficulte_ +1))
 	     decouverte(i,j);
 	   else if (Mon_jeu_[i][j].nb_bombe_ <9 ){
@@ -187,12 +179,10 @@ void Demineur::decouverte (const int x, const int y){
 	       ++nb_case_decouvert_;
 	     }
 	   }
-	 }
-       }
+	}
      }
    }
-}
-
+};
 
 
 void Demineur::update(const int x, const int y){
@@ -221,9 +211,7 @@ void Demineur::update(const int x, const int y){
 
 void Demineur::restart(){
   (this->Mon_jeu_).erase(this->Mon_jeu_.begin(),this->Mon_jeu_.end());
-  this->nb_case_decouvert_=0;
-  //configDemineur(this->difficulte_,this->nb_bombes_);
-  
+  this->nb_case_decouvert_=0;  
 };
 
 void Demineur::undo(){

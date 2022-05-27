@@ -10,8 +10,6 @@
 using namespace std;
 
 // constructor prototype
-score_file::score_file(){}
-
 score_file::score_file(string file_name, string player_name, const int classic_game_mode) : file_name_(file_name),player_name_(player_name),classic_game_mode_(classic_game_mode){
     string line,word;
     type_player player_score;
@@ -124,19 +122,19 @@ void score_file::print_scores(const int difficulte_choisie){
     cout << "------------------ SCORE FILE :";
     if (classic_game_mode_ == 1){
         switch (difficulte_choisie){
-            case 8 :
+            case 10 :
                 cout << " MODE FACILE ------------------" << endl<<endl;
                 for (int e = 0 ; e < nb_of_player_scored_easy ; ++e){
                     cout << "TOP " << setw(2)<< e+1 << " | joueur : " <<setw(15)<< list_of_easy_player[e].name_ << " | temps : " << setw(5) <<list_of_easy_player[e].chrono_ << " secondes"<< endl ;
                 }
             break;
-            case 14:
+            case 20:
                 cout << " MODE MOYEN ------------------" << endl<<endl;
                 for (int e = 0 ; e < nb_of_player_scored_medium ; ++e){
                     cout << "TOP " << setw(2) <<e+1 << " | joueur : " <<setw(15)<< list_of_easy_player[e].name_ << " | temps : " << setw(5) <<list_of_easy_player[e].chrono_ << " secondes"<< endl ;
                 }
             break;
-            case 20 :
+            case 30 :
                 cout << " MODE DIFFICILE ------------------" << endl<<endl;
                 for (int e = 0 ; e < nb_of_player_scored_hard ; ++e){
                     cout <<  "TOP " <<setw(2) << e+1 << " | joueur : " << setw(15)<<list_of_easy_player[e].name_ << " | temps : " << setw(5) <<list_of_easy_player[e].chrono_ << " secondes"<< endl ;
@@ -147,7 +145,7 @@ void score_file::print_scores(const int difficulte_choisie){
     else{
         cout << " MODE CUSTOM ------------------" << endl<<endl;
         for (int e = 0 ; e < nb_of_player_scored_custom ; ++e){
-            cout << "joueur : " << setw(15)<<list_of_custom_player[e].name_ << " | temps : " << setw(5) <<list_of_custom_player[e].chrono_ << " secondes"<< " | grille de : "<< list_of_custom_player[e].difficulte_*list_of_custom_player[e].difficulte_ << " cases "<< " avec  "<< list_of_custom_player[e].nb_bombes_ << " bombes "<< endl ;
+            cout << "joueur : " << setw(15)<<list_of_custom_player[e].name_ << " | temps : " << setw(5) <<list_of_custom_player[e].chrono_ << " secondes"<< " | grille de : "<< list_of_custom_player[e].difficulte_ << " cases "<< " avec  "<< list_of_custom_player[e].nb_bombes_ << " bombes "<< endl ;
         }
     }
 
@@ -171,7 +169,7 @@ void score_file::add_score(const int score, const double tps,const int nb_bombes
 
     if (classic_game_mode_ == 1){
         switch (score){
-            case 8 :
+            case 10 :
                 ++nb_of_player_scored_easy;
                 list_of_easy_player.push_back(test);
                 if ((test.chrono_<list_of_easy_player[0].chrono_) | (nb_of_player_scored_easy ==1))
@@ -180,7 +178,7 @@ void score_file::add_score(const int score, const double tps,const int nb_bombes
                 if (nb_of_player_scored_easy >10)
                     nb_of_player_scored_easy=10;
             break;
-            case 14:
+            case 20:
                 ++nb_of_player_scored_medium;
                 list_of_medium_player.push_back(test);
                 if ((test.chrono_<list_of_medium_player[0].chrono_) | (nb_of_player_scored_medium ==1))
@@ -189,7 +187,7 @@ void score_file::add_score(const int score, const double tps,const int nb_bombes
                 if (nb_of_player_scored_medium >10)
                     nb_of_player_scored_medium=10;
             break;
-            case 20 :
+            case 30 :
                 ++nb_of_player_scored_hard;
                 list_of_hard_player.push_back(test);
                 if (test.chrono_<list_of_hard_player[0].chrono_ or nb_of_player_scored_hard==1)
@@ -227,7 +225,7 @@ void score_file::add_score(const int score, const double tps,const int nb_bombes
         for (int e = 0 ; e < nb_of_player_scored_medium ; ++e){
             fout << list_of_medium_player[e].name_ << ":" <<list_of_medium_player[e].difficulte_ << ":" <<list_of_medium_player[e].chrono_ << endl ;
         }
-        fout << "/DIFFICILE:"<<nb_of_player_scored_hard <<endl;
+        fout << "/DIFFILE:"<<nb_of_player_scored_hard <<endl;
         for (int e = 0 ; e < nb_of_player_scored_hard ; ++e){
             fout << list_of_hard_player[e].name_ << ":" <<list_of_hard_player[e].difficulte_ << ":" << list_of_hard_player[e].chrono_ << endl ;
         }

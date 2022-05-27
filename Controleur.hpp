@@ -56,7 +56,7 @@ public:
   }
 
   void on_item_mode(){
-     m->no_death_mode=v->afficherChoixMode();
+    m->no_death_mode=v->afficherChoixMode();
   }  
   
 };

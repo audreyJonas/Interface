@@ -69,6 +69,8 @@ VueG::VueG():
   afficherPremierePage();
   afficherDialogue();
   afficherDifficulte();
+
+  this->start = chrono::steady_clock::now();
   show_all_children();
 }
 
@@ -77,7 +79,7 @@ void VueG::update(std::vector<std::string> &info, int& res){
   for(auto i=0; i<info.size(); i++){
     auto img = new Gtk::Image("./Icons/"+info[i]+".png");
     grille[i]->set_image(*img);
-    if(info[i]!="n" && info[i]!="flag"){
+    if((info[i]!="n" and info[i]!="flag") || (info[i]=="flag" and !bDrapeaux.get_active())){
       //si une case est découvete et n'est pas un drapeau
       grille[i]->set_sensitive(false);//elle n'est plus cliquable
 	}
@@ -85,23 +87,38 @@ void VueG::update(std::vector<std::string> &info, int& res){
       //si une case est non découverte mais incliquable -> undo réalisé
       grille[i]->set_sensitive(true); //elle redevient cliquable
     }
+    
   }
-  if(res == 0){
+  if(res == 0){ //perdu
     Gtk::MessageDialog winInstruction(*this, "Vous avez perdu", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
     winInstruction.set_title("Fin du jeu");
     winInstruction.set_secondary_text("Aie attention aux bombes! Vous gagnerez surement la prochaine fois. Pour rejouer cliquez sue Nouvelle partie");
     winInstruction.run();
   }
-  else if(res==-1){
-    Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
+  else if(res==-1){ //gagné
+    auto duration = ((int) chrono::duration<double, std::milli> (chrono::steady_clock::now() - start).count()/10) / 100.0;
+    std::ostringstream temps;
+    temps << duration;
+    Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_YES_NO);
     winInstruction.set_title("Fin du jeu");
-    winInstruction.set_secondary_text("FELICITATIONS !!! N hesitez pas a rejouer en augmentant la difficulte");
-    winInstruction.run();
+    winInstruction.set_secondary_text("FELICITATIONS !!! Vous avez mis: " + temps.str() + " secondes. N hesitez pas a rejouer en augmentant la difficulte.\n\n Souhaitez-vous enregistrer votre score?");
+    int reponse = winInstruction.run();
+    if(reponse == Gtk::RESPONSE_YES) {
+      this->score.add_score(this->Difficulte,duration,this->Bombes);
+      this->score.print_scores(this->Difficulte);
+    }
   }
-  else if(res==2){
+  else if(res==2){ //perdu en no_death_mode
     Gtk::MessageDialog winInstruction(*this, "Bombe", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
     winInstruction.set_title("No death mode");
     winInstruction.set_secondary_text("Vous avez selectionne une bombe, votre derniere action a ete annulee");
+    winInstruction.run();
+  }
+  else if(res==3){ //gagné en no_death_mode
+    std::cout<<"test"<<std::endl;
+    Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
+    winInstruction.set_title("Fin du jeu");
+    winInstruction.set_secondary_text("FELICITATIONS !!! N hesitez pas a rejouer en augmentant la difficulte.\n\n Souhaitez-vous enregistrer votre score?");
     winInstruction.run();
   }
   
@@ -129,7 +146,8 @@ void VueG::afficherDialogue() {
   int reponse = dialogue.run(); //Lancer la boîte de dialogue.
     
     if(reponse == Gtk::RESPONSE_OK) { //Si l'utilisateur clique sur Valider.
-      pseudoJoueur.set_text(dialogue.get_texte());
+      this->pseudo=dialogue.get_texte();
+      pseudoJoueur.set_text(this->pseudo);
     }
 }
 
@@ -149,11 +167,12 @@ void VueG::afficherDifficulte(){
   case 1:difficulte=8;bombes=8;break;
   case 2: difficulte=14;bombes=8;break;
   case 3: difficulte=20;bombes=20;break;
-  case 4: auto diff=afficherChoixDimensions(); difficulte=diff.first;bombes=diff.second;break;
+  case 4: auto diff=afficherChoixDimensions(); difficulte=diff.first;bombes=diff.second;this->classic_game_mode=0;break;
   }
   this->Difficulte=difficulte;
   this->Bombes=bombes;
   initialiserGrille(this->Difficulte);
+  this->score = score_file("score.txt", this->pseudo,this->classic_game_mode);
 }
 
 int VueG::afficherChoixMode(){
@@ -168,12 +187,19 @@ int VueG::afficherChoixMode(){
 }
 
 
-void VueG::afficherFichierScores(){
+void VueG::afficherFichierScores(std::string texte){
+   Gtk::MessageDialog fenetreScores(*this, "Fichier de Score", false);
+   fenetreMode.set_title("Scores");
+   fenetreMode.set_secondary_text(texte);
+   int resultat = fenetreMode.run();
+   if(resultat == Gtk::RESPONSE_YES) { //S'il a cliqué sur Oui.
+     return 1;
+    }
   
 }
 
 std::pair<int,int> VueG::afficherChoixDimensions(){
-  dimWindow fenetre_dimensions(this,"Dimensions","Nombre de bombes",5,1,20,1);
+  dimWindow fenetre_dimensions(this,"Dimensions","Nombre de bombes",5,2,20,1);
   fenetre_dimensions.run();
   return make_pair(fenetre_dimensions.get_dim(),fenetre_dimensions.get_bombes());  
 }
@@ -232,6 +258,7 @@ void VueG::resetGrille(){
   }
   casesGrille.erase(casesGrille.begin(),casesGrille.end());
   afficherDifficulte();
+  this->start = chrono::steady_clock::now();
 }
 
 std::vector<Mine*> VueG::get_casesGrille(){

@@ -14,12 +14,6 @@
 using namespace std;
 
 #define je_suis_une_bombe 9
-#define FACILE 10
-#define MOYEN 20
-#define DIFFICILE 30
-
-
-
 
 typedef struct{
   type_etat etat_ = NON_DECOUVERTE;

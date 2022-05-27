@@ -21,17 +21,16 @@ public:
     v->addBUndoListener(this);
     v->addBRedoListener(this);
     v->addItemModeListener(this);
-    // v->addItemDimensionsListener(this);
   }
 
   void on_gridBox_button(int l, int c){
     //fonction qui lie le clique sur les boutons à la découverte d'une case
     if (premier_coup == 1){
-      m->configDemineur(v->Difficulte);
+      m->configDemineur(v->Difficulte,v->Bombes);
       m->poser_bombe(l,c);
       premier_coup=0;
     }
-    m->update(l,c);	     
+    m->update(l,c);
   }
 
   void on_drapeaux_button(){
@@ -43,6 +42,7 @@ public:
     m->restart();
     v->resetGrille();
     premier_coup=1;
+    v->addGridListener(this);
   }
 
   void on_undo_button(){
@@ -57,13 +57,6 @@ public:
 
   void on_item_mode(){
      m->no_death_mode=v->afficherChoixMode();
-  }
-
-  /* void on_item_dimensions(){
-     v->afficherDifficulte();
-     }*/
-  
-  
-  
+  }  
   
 };

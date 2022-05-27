@@ -22,6 +22,8 @@
 #include <vector>
 #include <cstring>
 #include <utility>
+#include <sstream>
+#include <chrono>
 
 #include "Observateur.hpp"
 #include "firstWindow.hpp"
@@ -29,6 +31,7 @@
 #include "dimWindow.hpp"
 #include "Dialogue.hpp"
 #include "Mine.hpp"
+#include "score_file.h"
 
 class Controleur;
 
@@ -36,6 +39,10 @@ class VueG : public Gtk::Window, public Observateur<std::vector<std::string>,int
 
 public:
   int Difficulte, Bombes;
+  int classic_game_mode = 1;
+  std::string pseudo;
+  std::chrono::_V2::steady_clock::time_point start;
+  score_file score;
 
 private:
   Gtk::MenuBar barreMenu;
@@ -64,7 +71,7 @@ public:
   void afficherInstructions();
   void afficherDifficulte();
   int afficherChoixMode();
-  void afficherFichierScores();
+  void afficherFichierScores(std::string texte);
   std::pair<int,int> afficherChoixDimensions();
   void initialiserGrille(const int M);
   void addGridListener(Controleur* c);

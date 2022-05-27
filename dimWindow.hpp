@@ -25,7 +25,7 @@ public :
     saisie1_(saisie1),
     saisie2_(saisie2),
     dimensions_(Gtk::Adjustment::create(defaut, min, max, step)),
-    bombes_(Gtk::Adjustment::create(defaut,min,24,step)),
+    bombes_(Gtk::Adjustment::create(defaut,1,24,step)),
     boutonDim_(dimensions_),
     boutonBombes_(bombes_)   
   {
