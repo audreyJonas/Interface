@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <sstream>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ public:
   score_file();
   score_file(string file_name, string player_name, const int classic_game_mode);
   virtual ~score_file();
-  void print_scores(const int difficulte_choisie);
+  ostringstream print_scores(const int difficulte_choisie);
   void add_score(const int score,const double tps,const int nb_bombes);
 
   bool New_High_Score = false;

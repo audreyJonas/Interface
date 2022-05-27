@@ -11,7 +11,7 @@ VueG::VueG():
   itemMenu("Menu"),
   itemAide("Aide"),
   itemParametres("Parametres"),
-  subItemFichierScores(Gtk::Stock::FILE),
+  subItemFichierScores("Scores"),
   subItemQuitter(Gtk::Stock::CLOSE),
   subItemRegles(Gtk::Stock::HELP),
   subItemMode("Mode"),
@@ -79,7 +79,7 @@ void VueG::update(std::vector<std::string> &info, int& res){
   for(auto i=0; i<info.size(); i++){
     auto img = new Gtk::Image("./Icons/"+info[i]+".png");
     grille[i]->set_image(*img);
-    if((info[i]!="n" and info[i]!="flag") || (info[i]=="flag" and !bDrapeaux.get_active())){
+    if(info[i]!="n" and info[i]!="flag"){
       //si une case est découvete et n'est pas un drapeau
       grille[i]->set_sensitive(false);//elle n'est plus cliquable
 	}
@@ -105,7 +105,7 @@ void VueG::update(std::vector<std::string> &info, int& res){
     int reponse = winInstruction.run();
     if(reponse == Gtk::RESPONSE_YES) {
       this->score.add_score(this->Difficulte,duration,this->Bombes);
-      this->score.print_scores(this->Difficulte);
+      afficherFichierScores();
     }
   }
   else if(res==2){ //perdu en no_death_mode
@@ -187,15 +187,12 @@ int VueG::afficherChoixMode(){
 }
 
 
-void VueG::afficherFichierScores(std::string texte){
-   Gtk::MessageDialog fenetreScores(*this, "Fichier de Score", false);
-   fenetreMode.set_title("Scores");
-   fenetreMode.set_secondary_text(texte);
-   int resultat = fenetreMode.run();
-   if(resultat == Gtk::RESPONSE_YES) { //S'il a cliqué sur Oui.
-     return 1;
-    }
-  
+void VueG::afficherFichierScores(){
+  std::string  fScore = (this->score.print_scores(this->Difficulte)).str();
+  Gtk::MessageDialog fenetreScores(*this, "Fichier de Score", false);
+  fenetreScores.set_title("Scores");
+  fenetreScores.set_secondary_text(fScore);
+  fenetreScores.run();    
 }
 
 std::pair<int,int> VueG::afficherChoixDimensions(){

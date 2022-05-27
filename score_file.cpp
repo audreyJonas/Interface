@@ -118,43 +118,43 @@ score_file::score_file(string file_name, string player_name, const int classic_g
 
 score_file::~score_file(){};
 
-void score_file::print_scores(const int difficulte_choisie){
-    system("cls");
-    cout<<"\x1B[2J\x1B[H";
-    cout << "------------------ SCORE FILE :";
-    if (classic_game_mode_ == 1){
-        switch (difficulte_choisie){
-            case 8 :
-                cout << " MODE FACILE ------------------" << endl<<endl;
-                for (int e = 0 ; e < nb_of_player_scored_easy ; ++e){
-                    cout << "TOP " << setw(2)<< e+1 << " | joueur : " <<setw(15)<< list_of_easy_player[e].name_ << " | temps : " << setw(5) <<list_of_easy_player[e].chrono_ << " secondes"<< endl ;
-                }
-            break;
-            case 14:
-                cout << " MODE MOYEN ------------------" << endl<<endl;
-                for (int e = 0 ; e < nb_of_player_scored_medium ; ++e){
-                    cout << "TOP " << setw(2) <<e+1 << " | joueur : " <<setw(15)<< list_of_easy_player[e].name_ << " | temps : " << setw(5) <<list_of_easy_player[e].chrono_ << " secondes"<< endl ;
-                }
-            break;
-            case 20 :
-                cout << " MODE DIFFICILE ------------------" << endl<<endl;
-                for (int e = 0 ; e < nb_of_player_scored_hard ; ++e){
-                    cout <<  "TOP " <<setw(2) << e+1 << " | joueur : " << setw(15)<<list_of_easy_player[e].name_ << " | temps : " << setw(5) <<list_of_easy_player[e].chrono_ << " secondes"<< endl ;
-                }
-            break;
-        }
+ostringstream score_file::print_scores(const int difficulte_choisie){
+  ostringstream text;
+  //system("cls");
+  //<<"\x1B[2J\x1B[H";
+  text << "------------------ SCORE FILE :";
+  if (classic_game_mode_ == 1){
+    switch (difficulte_choisie){
+    case 8 :
+      text << " MODE FACILE ------------------" << endl<<endl;
+      for (int e = 0 ; e < nb_of_player_scored_easy ; ++e){
+	text << "TOP " << setw(2)<< e+1 << " | joueur : " <<setw(15)<< list_of_easy_player[e].name_ << " | temps : " << setw(5) <<list_of_easy_player[e].chrono_ << " secondes"<< endl ;
+      }
+      break;
+    case 14:
+      text << " MODE MOYEN ------------------" << endl<<endl;
+      for (int e = 0 ; e < nb_of_player_scored_medium ; ++e){
+	text << "TOP " << setw(2) <<e+1 << " | joueur : " <<setw(15)<< list_of_easy_player[e].name_ << " | temps : " << setw(5) <<list_of_easy_player[e].chrono_ << " secondes"<< endl ;
+      }
+      break;
+    case 20 :
+      text << " MODE DIFFICILE ------------------" << endl<<endl;
+      for (int e = 0 ; e < nb_of_player_scored_hard ; ++e){
+	text <<  "TOP " <<setw(2) << e+1 << " | joueur : " << setw(15)<<list_of_easy_player[e].name_ << " | temps : " << setw(5) <<list_of_easy_player[e].chrono_ << " secondes"<< endl ;
+      }
+      break;
     }
-    else{
-        cout << " MODE CUSTOM ------------------" << endl<<endl;
-        for (int e = 0 ; e < nb_of_player_scored_custom ; ++e){
-            cout << "joueur : " << setw(15)<<list_of_custom_player[e].name_ << " | temps : " << setw(5) <<list_of_custom_player[e].chrono_ << " secondes"<< " | grille de : "<< list_of_custom_player[e].difficulte_*list_of_custom_player[e].difficulte_ << " cases "<< " avec  "<< list_of_custom_player[e].nb_bombes_ << " bombes "<< endl ;
-        }
+  }
+  else{
+    text << " MODE CUSTOM ------------------" << endl<<endl;
+    for (int e = 0 ; e < nb_of_player_scored_custom ; ++e){
+      text << "joueur : " << setw(15)<<list_of_custom_player[e].name_ << " | temps : " << setw(5) <<list_of_custom_player[e].chrono_ << " secondes"<< " | grille de : "<< list_of_custom_player[e].difficulte_*list_of_custom_player[e].difficulte_ << " cases "<< " avec  "<< list_of_custom_player[e].nb_bombes_ << " bombes "<< endl ;
     }
-
-    cout << endl<<"------------------ END OF SCORE FILE ------------------" << endl << endl ;
-
-    if (New_High_Score == true)
-        cout << "!!!!!!!!!!!!!!!!!!!!!!!!!! Well done !!! New High Score !!!!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+  }
+  text << endl<<"------------------ END OF SCORE FILE ------------------" << endl << endl ;
+  if (New_High_Score == true)
+    text << "!!!!!!!!!!!!!!!!!!!!!!!!!! Well done !!! New High Score !!!!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+  return text;
 }
 
 

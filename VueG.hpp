@@ -71,7 +71,7 @@ public:
   void afficherInstructions();
   void afficherDifficulte();
   int afficherChoixMode();
-  void afficherFichierScores(std::string texte);
+  void afficherFichierScores();
   std::pair<int,int> afficherChoixDimensions();
   void initialiserGrille(const int M);
   void addGridListener(Controleur* c);
