@@ -20,7 +20,7 @@ $(PROG): $(OBJS)
 
 History.o: History.h
 Demineur.o: Demineur.h
-VueG.o: VueG.hpp Observateur.hpp firstWindow.hpp Dialogue.hpp choiceWindow.hpp Mine.hpp
+VueG.o: VueG.hpp Observateur.hpp firstWindow.hpp Dialogue.hpp choiceWindow.hpp Mine.hpp dimWindow.hpp
 main.o: VueG.hpp Modele.hpp Observable.hpp Controleur.hpp Demineur.h #les options du compilateur
 # le lien entre .o et .c
 # $< dernière dépendance	

@@ -1,0 +1,54 @@
+#include <string>
+
+#include <gtkmm/box.h>
+#include <gtkmm/dialog.h>
+#include <gtkmm/adjustment.h>
+#include <gtkmm/spinbutton.h>
+#include <gtkmm/label.h>
+#include <cstring>
+
+class dimWindow : public Gtk::Dialog{
+private :
+  Gtk::Box* saisieDimensions;
+  Gtk::Label saisie1_;
+  Gtk::Label saisie2_;
+  Glib::RefPtr<Gtk::Adjustment> dimensions_ ;
+  Gtk::SpinButton boutonDim_;
+  Gtk::SpinButton boutonBombes_;
+  int dim_=5;
+  
+public :
+  dimWindow(Gtk::Window* parent, std::string saisie1, std::string saisie2,  int defaut, int min,int max, int step):
+    saisieDimensions(get_vbox()),
+    saisie1_(saisie1),
+    saisie2_(saisie2),
+    dimensions_(Gtk::Adjustment::create(defaut, min, max, step)),
+    boutonDim_(dimensions_)
+    // boutonBombes_(nb_colonnes_)   
+  {
+    boutonDim_.set_numeric();
+    //boutonColonnes_.set_numeric();
+    saisieDimensions->pack_start(saisie1_);
+    saisieDimensions->pack_start(boutonDim_);
+    saisieDimensions->pack_start(saisie2_);
+    //saisieDimensions->pack_start(boutonColonnes_);
+    add_button(Gtk::Stock::OK,  Gtk::RESPONSE_OK);
+    
+    boutonDim_.signal_value_changed().connect(sigc::mem_fun(*this, &dimWindow::set_dim));
+    // boutonColonnes_.signal_value_changed().connect(sigc::mem_fun(*this, &dimWindow::set_lignes));
+    show_all_children();
+    
+  }
+  
+  void set_dim(){
+    this->dim_= boutonDim_.get_value_as_int();
+  }
+  int get_dim(){
+    return this->dim_;
+  }
+  
+
+  
+
+  
+};

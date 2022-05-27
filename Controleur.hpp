@@ -18,6 +18,10 @@ public:
     v->addGridListener(this);
     v->addBDrapeauxListener(this);
     v->addBRestartListener(this);
+    v->addBUndoListener(this);
+    v->addBRedoListener(this);
+    v->addItemModeListener(this);
+    // v->addItemDimensionsListener(this);
   }
 
   void on_gridBox_button(int l, int c){
@@ -27,7 +31,7 @@ public:
       m->poser_bombe(l,c);
       premier_coup=0;
     }
-    m->update(l,c);	     
+    m->update(l,c);
   }
 
   void on_drapeaux_button(){
@@ -39,5 +43,21 @@ public:
     m->restart();
     v->resetGrille();
     premier_coup=1;
+    v->addGridListener(this);
   }
+
+  void on_undo_button(){
+    m->undo();
+    m->affichage();
+  }
+  
+  void on_redo_button(){
+    m->redo();
+    m->affichage();
+  }
+
+  void on_item_mode(){
+     m->no_death_mode=v->afficherChoixMode();
+  }  
+  
 };

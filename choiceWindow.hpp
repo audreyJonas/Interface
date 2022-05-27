@@ -12,29 +12,31 @@ private :
   Gtk::Box m_box;
   Gtk::Label commentaire_;
   Gtk::RadioButtonGroup groupe_;
-  Gtk::RadioButton option1_, option2_, option3_;
+  Gtk::RadioButton option1_, option2_, option3_,option4_;
   Gtk::Separator separateur;
   int optionChoisie_=1;
 
 public :
-  choiceWindow(Gtk::Window* parent, std::string titre, std::string commentaire, std::string option1, std::string option2, std::string option3):
+  choiceWindow(Gtk::Window* parent, std::string titre, std::string commentaire, std::string option1, std::string option2, std::string option3,std::string option4):
     Gtk::Dialog(titre, *parent),
     boiteV(get_vbox()),
     commentaire_(commentaire),
     option1_(groupe_,option1),
     option2_(groupe_,option2),
-    option3_(groupe_,option3)
-  
+    option3_(groupe_,option3),
+    option4_(groupe_,option4)  
   {
     boiteV->pack_start(commentaire_);
     m_box.pack_start(option1_);
     m_box.pack_start(option2_);
     m_box.pack_start(option3_);
+    m_box.pack_start(option4_);
     boiteV->pack_start(m_box);
     add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
     option1_.signal_toggled().connect(sigc::mem_fun(*this, &choiceWindow::setOption1));
     option2_.signal_toggled().connect(sigc::mem_fun(*this, &choiceWindow::setOption2));
     option3_.signal_toggled().connect(sigc::mem_fun(*this, &choiceWindow::setOption3));
+    option4_.signal_toggled().connect(sigc::mem_fun(*this, &choiceWindow::setOption4));
     show_all_children();
     
   }
@@ -51,5 +53,8 @@ public :
   }
   void setOption3(){
     this->optionChoisie_=3;
+  }
+   void setOption4(){
+    this->optionChoisie_=4;
   }
 };

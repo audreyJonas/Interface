@@ -14,15 +14,18 @@ VueG::VueG():
   subItemFichierScores(Gtk::Stock::FILE),
   subItemQuitter(Gtk::Stock::CLOSE),
   subItemRegles(Gtk::Stock::HELP),
-  subItemDifficulte(Gtk::Stock::PROPERTIES),
+  subItemMode("Mode"),
+  // subItemDimensions("Dimensions"),
   boiteMenu(false),
   boiteJeu(false),
   Grille(false),
   boiteJoueur(false),
   Jeu(false),
-  avatarJoueur("Avatars/yoshi3.png"),
+  avatarJoueur("./Avatars/yoshi.png"),
   bDrapeaux("Drapeaux"),
-  bRestart("Nouvelle Partie") 
+  bRestart("Nouvelle Partie"),
+  bUndo(Gtk::Stock::GO_BACK),
+  bRedo(Gtk::Stock::GO_FORWARD)
 {
   /*Creation des differents menus*/
   /*Barre de menu*/
@@ -39,15 +42,17 @@ VueG::VueG():
   /*Sous items du menu deroulant Aide*/
   Aide.append(subItemRegles);
   /*Sous items du menu deroulant Parametres*/
-  Parametres.append(subItemDifficulte);
+  Parametres.append(subItemMode);
+  //Parametres.append(subItemDimensions);
 
   /*Gestion des emplacements graphiques*/
   bDrapeaux.set_active(false);
   boiteMenu.pack_start(barreMenu,Gtk::PACK_SHRINK);
+  boiteMenu.pack_start(bUndo,Gtk::PACK_SHRINK);
+  boiteMenu.pack_start(bRedo,Gtk::PACK_SHRINK);
   boiteJoueur.pack_start(avatarJoueur,Gtk::PACK_SHRINK);
   boiteJoueur.pack_end(pseudoJoueur,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteMenu,Gtk::PACK_SHRINK);
-  //Jeu.pack_start(bJouer);
   Grille.pack_start(bDrapeaux);
   Grille.pack_start(GrilleJeu);
   boiteJeu.pack_end(boiteJoueur,Gtk::PACK_SHRINK);
@@ -60,6 +65,7 @@ VueG::VueG():
   /*Gestion des connexions*/
   subItemQuitter.signal_activate().connect(sigc::mem_fun(*this,&VueG::close));
   subItemRegles.signal_activate().connect(sigc::mem_fun(*this,&VueG::afficherInstructions));
+  subItemFichierScores.signal_activate().connect(sigc::mem_fun(*this,&VueG::afficherFichierScores));
   afficherPremierePage();
   afficherDialogue();
   afficherDifficulte();
@@ -69,18 +75,11 @@ VueG::VueG():
 void VueG::update(std::vector<std::string> &info, int& res){
   auto grille=this->get_casesGrille();
   for(auto i=0; i<info.size(); i++){
-    auto img = new Gtk::Image("icons/"+info[i]+".png");
+    auto img = new Gtk::Image("./Icons/"+info[i]+".png");
     grille[i]->set_image(*img);
-      //set_label(info[i]);
-    /*if(info[i]!=" "){
-      grille[i]->set_label(info[i]);
-      if(!this->bDrapeaux.get_active()){
+    /*f(info[i]!="n" && info[i]!="flag"){
 	grille[i]->set_sensitive(false);
-	}
-    }
-    else{
-      grille[i]->set_label(" ");
-    }*/
+	}*/
   }
   if(res == 0){
     Gtk::MessageDialog winInstruction(*this, "Vous avez perdu", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
@@ -92,6 +91,12 @@ void VueG::update(std::vector<std::string> &info, int& res){
     Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
     winInstruction.set_title("Fin du jeu");
     winInstruction.set_secondary_text("FELICITATIONS !!! N hesitez pas a rejouer en augmentant la difficulte");
+    winInstruction.run();
+  }
+  else if(res==2){
+    Gtk::MessageDialog winInstruction(*this, "Bombe", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
+    winInstruction.set_title("No death mode");
+    winInstruction.set_secondary_text("Vous avez selectionne une bombe, votre derniere action a ete annulee");
     winInstruction.run();
   }
   
@@ -132,26 +137,48 @@ void VueG::afficherInstructions(){
   }
 
 void VueG::afficherDifficulte(){
-  choiceWindow choix(this, "Difficulte","Choisissez la difficulte","Facile","Moyen","Difficile");
+  choiceWindow choix(this, "Difficulte","Choisissez la difficulte","Facile","Moyen","Difficile","Choisir");
   choix.run();
   switch(choix.getOption()){
-  case 1:this->Difficulte=10;break;
-  case 2: this->Difficulte=20;break;
-  case 3: this->Difficulte=30;break;
+  case 1:this->Difficulte=8;;break;
+  case 2: this->Difficulte=14;break;
+  case 3: this->Difficulte=20;break;
+  case 4: this->Difficulte=afficherChoixDimensions();break;
   }
-  initialiserGrille(this->Difficulte,this->Difficulte);
+  initialiserGrille(this->Difficulte);
 }
 
-void VueG::initialiserGrille(const int M, const int N){
+int VueG::afficherChoixMode(){
+  Gtk::MessageDialog fenetreMode(*this, "Voulez vous jouer en \"no death mode\"?", false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
+   fenetreMode.set_title("Mode ?");
+   fenetreMode.set_secondary_text("Cela signifie que vous ne pourrez pas mourir et vous ne pourrez pas sauvegarder votre score");
+   int resultat = fenetreMode.run();
+   if(resultat == Gtk::RESPONSE_YES) { //S'il a cliqué sur Oui.
+     return 1;
+    }
+   return 0;  
+}
+
+
+void VueG::afficherFichierScores(){
+  
+}
+
+int VueG::afficherChoixDimensions(){
+  dimWindow fenetre_dimensions(this,"Dimensions","Nombre de bombes",5,1,20,1);
+  fenetre_dimensions.run();
+  return fenetre_dimensions.get_dim();  
+}
+
+void VueG::initialiserGrille(const int M){
   GrilleJeu.set_row_homogeneous(true);
   GrilleJeu.set_column_homogeneous(true);
   for(int i=0; i<M; i++){
-    for(int j=0; j<N; j++){
+    for(int j=0; j<M; j++){
       auto btn = new Mine();
       btn->set_ligne(i);
       btn->set_colonne(j);
       casesGrille.push_back(btn);
-      btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &VueG::testActive),btn->get_ligne(),btn->get_colonne(),M));
       GrilleJeu.attach(*btn,btn->get_colonne(),btn->get_ligne());
       btn->show();
     }
@@ -172,7 +199,23 @@ void VueG::addBRestartListener(Controleur* c){
   bRestart.signal_clicked().connect(sigc::mem_fun(*c, &Controleur::on_restart_button));
 }
 
+void VueG::addBUndoListener(Controleur* c){
+  bUndo.signal_clicked().connect(sigc::mem_fun(*c, &Controleur::on_undo_button));
+}
 
+void VueG::addBRedoListener(Controleur* c){
+  bRedo.signal_clicked().connect(sigc::mem_fun(*c, &Controleur::on_redo_button));
+}
+
+void VueG::addItemModeListener(Controleur* c){
+  subItemMode.signal_activate().connect(sigc::mem_fun(*c,&Controleur::on_item_mode));
+}
+
+/*
+void VueG::addItemDimensionsListener(Controleur* c){
+  subItemDimensions.signal_activate().connect(sigc::mem_fun(*c,&Controleur::on_item_dimensions));
+}
+*/
 void VueG::testActive(int l, int c,int M){
   auto caseCliquee =casesGrille[l*M+c];
    if(!this->bDrapeaux.get_active()){
@@ -182,9 +225,13 @@ void VueG::testActive(int l, int c,int M){
 
 void VueG::resetGrille(){
   for(auto cell: casesGrille){
-    auto img = new Gtk::Image("icons/0.png");
+    auto img = new Gtk::Image("./Icons/0.png");
     cell->set_image(*img);
+    cell->set_sensitive(true);
   }
+  auto grille =this->get_casesGrille();
+  grille.erase(grille.begin(),grille.end());
+  afficherDifficulte();
 }
 
 std::vector<Mine*> VueG::get_casesGrille(){

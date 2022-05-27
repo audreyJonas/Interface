@@ -40,10 +40,3 @@ void History::add_modif(Type_history history_last_modif ){
 
     history_[tour_actuelle].push_back(history_last_modif);
 };
-
-void History::reset(){
-  history_.clear();
-  tour_actuelle=0;
-  tour_total=0;
-};
-

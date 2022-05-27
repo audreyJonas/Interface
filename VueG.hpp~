@@ -25,6 +25,7 @@
 #include "Observateur.hpp"
 #include "firstWindow.hpp"
 #include "choiceWindow.hpp"
+#include "dimWindow.hpp"
 #include "Dialogue.hpp"
 #include "Mine.hpp"
 
@@ -39,7 +40,7 @@ private:
   Gtk::MenuBar barreMenu;
   Gtk::MenuItem itemMenu,itemAide,itemParametres;
   Gtk::Menu Menu,Aide,Parametres;
-  Gtk::ImageMenuItem subItemFichierScores,subItemQuitter,subItemRegles,subItemDifficulte;
+  Gtk::ImageMenuItem subItemFichierScores,subItemQuitter,subItemRegles,subItemMode,subItemDimensions;
   Gtk::SeparatorMenuItem separateur;
   Gtk::HBox boiteMenu,boiteJeu,Grille;
   Gtk::VBox boiteJoueur,Jeu;
@@ -47,7 +48,7 @@ private:
   Gtk::Image avatarJoueur;
   Gtk::Grid GrilleJeu;
   Gtk::CheckButton bDrapeaux;
-  Gtk::Button bRestart;
+  Gtk::Button bRestart,bUndo,bRedo;
   std::vector<Mine*> casesGrille;
   
   
@@ -61,12 +62,19 @@ public:
   void afficherPremierePage();
   void afficherInstructions();
   void afficherDifficulte();
-  void initialiserGrille(const int M, const int N);
+  int afficherChoixMode();
+  void afficherFichierScores();
+  int afficherChoixDimensions();
+  void initialiserGrille(const int M);
   void addGridListener(Controleur* c);
   void addBDrapeauxListener(Controleur* c);
   void addBRestartListener(Controleur* c);
+  void addBUndoListener(Controleur* c);
+  void addBRedoListener(Controleur* c);
+  void addItemModeListener(Controleur* c);
+  //void addItemDimensionsListener(Controleur* c);
   void resetGrille();
-  //void testActive(int l, int c, int M);
+  void testActive(int l, int c, int M);
   std::vector<Mine*> get_casesGrille();
   
 };
