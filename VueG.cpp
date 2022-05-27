@@ -81,8 +81,8 @@ void VueG::update(std::vector<std::string> &info, int& res){
       //si une case est découvete et n'est pas un drapeau
       grille[i]->set_sensitive(false);//elle n'est plus cliquable
 	}
-    else if(info[i]=="n" and (grille[i]->get_active() || !grille[i]->get_sensitive())){
-      //si une case est non découverte mais enfoncée-> undo
+    else if(info[i]=="n" and !grille[i]->get_sensitive()){
+      //si une case est non découverte mais incliquable -> undo réalisé
       grille[i]->set_sensitive(true); //elle redevient cliquable
     }
   }

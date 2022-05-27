@@ -1,10 +1,10 @@
 #pragma once
 
 #include "gtkmm.h"
-#include "gtkmm/togglebutton.h"
+#include "gtkmm/button.h"
 #include <vector>
 
-class Mine: public Gtk::ToggleButton{
+class Mine: public Gtk::Button{
 private:
     int ligne;
     int colonne;
