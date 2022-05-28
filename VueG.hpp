@@ -81,7 +81,6 @@ public:
   void addBRedoListener(Controleur* c);
   void addItemModeListener(Controleur* c);
   void resetGrille();
-  void testActive(int l, int c, int M);
   std::vector<Mine*> get_casesGrille();
   
 };

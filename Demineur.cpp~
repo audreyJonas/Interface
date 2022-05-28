@@ -101,8 +101,13 @@ void Demineur::affichage_final() {
        notifierObservateurs(valeur,0);
       }
       else{
-	//renvoie status gagnant
-	notifierObservateurs(valeur,-1);
+	 if(no_death_mode){
+	   notifierObservateurs(valeur,3);
+	 }
+	 else{
+	   //renvoie status gagnant
+	   notifierObservateurs(valeur,-1);
+	 }
       }
 }
 
@@ -131,7 +136,7 @@ int Demineur::jouer(const int x, const int y){
     if(nb_case_decouvert_ < difficulte_*difficulte_ - nb_bombes_ )
         return 1;
     else
-        return -1;
+      return -1;
 }
 
 int Demineur::drapeau(const int x, const int y){

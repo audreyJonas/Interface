@@ -192,6 +192,7 @@ void Demineur::decouverte (const int x, const int y){
 
 void Demineur::update(const int x, const int y){
   if(!this->drapeaux){  //si le joueur joue
+    if(Mon_jeu_[x+1][y+1].etat_ !=DRAPEAU){
       partie = this->jouer(x,y);
       if((partie!=-1) and (partie!=0)){//si le jouer n'a ni gagné(-1) ni perdu(0)
 	this->affichage(); //on update la grille
@@ -207,6 +208,7 @@ void Demineur::update(const int x, const int y){
 	}
       }
     }
+  }
     else{ //si le joueur place des drapeaux
       partie = this->drapeau(x,y);
       this->affichage();

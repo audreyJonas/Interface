@@ -89,39 +89,43 @@ void VueG::update(std::vector<std::string> &info, int& res){
     }
     
   }
-  if(res == 0){ //perdu
-    Gtk::MessageDialog winInstruction(*this, "Vous avez perdu", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
-    winInstruction.set_title("Fin du jeu");
-    winInstruction.set_secondary_text("Aie attention aux bombes! Vous gagnerez surement la prochaine fois. Pour rejouer cliquez sue Nouvelle partie");
-    winInstruction.run();
-  }
-  else if(res==-1){ //gagné
-    auto duration = ((int) chrono::duration<double, std::milli> (chrono::steady_clock::now() - start).count()/10) / 100.0;
-    std::ostringstream temps;
-    temps << duration;
-    Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_YES_NO);
-    winInstruction.set_title("Fin du jeu");
-    winInstruction.set_secondary_text("FELICITATIONS !!! Vous avez mis: " + temps.str() + " secondes. N hesitez pas a rejouer en augmentant la difficulte.\n\n Souhaitez-vous enregistrer votre score?");
-    int reponse = winInstruction.run();
-    if(reponse == Gtk::RESPONSE_YES) {
-      this->score.add_score(this->Difficulte,duration,this->Bombes);
-      afficherFichierScores();
+  if(res!=1){ //le jeu est fini
+    bUndo.set_sensitive(false);
+    bRedo.set_sensitive(false);
+    bDrapeaux.set_sensitive(false);
+    if(res == 0){ //perdu
+      Gtk::MessageDialog winInstruction(*this, "Vous avez perdu", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
+      winInstruction.set_title("Fin du jeu");
+      winInstruction.set_secondary_text("Aie attention aux bombes! Vous gagnerez surement la prochaine fois. Pour rejouer cliquez sur Nouvelle partie");
+      winInstruction.run();
+    }
+    else if(res==-1){ //gagné
+      auto duration = ((int) chrono::duration<double, std::milli> (chrono::steady_clock::now() - start).count()/10) / 100.0;
+      std::ostringstream temps;
+      temps << duration;
+      Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_YES_NO);
+      winInstruction.set_title("Fin du jeu");
+      winInstruction.set_secondary_text("FELICITATIONS !!! Vous avez mis: " + temps.str() + " secondes. N hesitez pas a rejouer en augmentant la difficulte.\n\n Souhaitez-vous enregistrer votre score?");
+      int reponse = winInstruction.run();
+      if(reponse == Gtk::RESPONSE_YES) {
+	this->score.add_score(this->Difficulte,duration,this->Bombes);
+	afficherFichierScores();
+      }
+    }
+    else if(res==2){ //perdu en no_death_mode
+      Gtk::MessageDialog winInstruction(*this, "Bombe", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
+      winInstruction.set_title("No death mode");
+      winInstruction.set_secondary_text("Vous avez selectionne une bombe, votre derniere action a ete annulee");
+      winInstruction.run();
+    }
+    else if(res==3){ //gagné en no_death_mode
+      std::cout<<"test"<<std::endl;
+      Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
+      winInstruction.set_title("Fin du jeu");
+      winInstruction.set_secondary_text("FELICITATIONS !!! N hesitez pas a rejouer en augmentant la difficulte.\n\n Souhaitez-vous enregistrer votre score?");
+      winInstruction.run();
     }
   }
-  else if(res==2){ //perdu en no_death_mode
-    Gtk::MessageDialog winInstruction(*this, "Bombe", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
-    winInstruction.set_title("No death mode");
-    winInstruction.set_secondary_text("Vous avez selectionne une bombe, votre derniere action a ete annulee");
-    winInstruction.run();
-  }
-  else if(res==3){ //gagné en no_death_mode
-    std::cout<<"test"<<std::endl;
-    Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
-    winInstruction.set_title("Fin du jeu");
-    winInstruction.set_secondary_text("FELICITATIONS !!! N hesitez pas a rejouer en augmentant la difficulte.\n\n Souhaitez-vous enregistrer votre score?");
-    winInstruction.run();
-  }
-  
 }
 
 void VueG::close(){
@@ -242,13 +246,6 @@ void VueG::addItemModeListener(Controleur* c){
   subItemMode.signal_activate().connect(sigc::mem_fun(*c,&Controleur::on_item_mode));
 }
 
-void VueG::testActive(int l, int c,int M){
-  auto caseCliquee =casesGrille[l*M+c];
-   if(!this->bDrapeaux.get_active()){
-    caseCliquee->set_sensitive(false);
-    }  
-}
-
 void VueG::resetGrille(){
   for(auto cell: casesGrille){
     GrilleJeu.remove(*cell);
@@ -256,6 +253,9 @@ void VueG::resetGrille(){
   casesGrille.erase(casesGrille.begin(),casesGrille.end());
   afficherDifficulte();
   this->start = chrono::steady_clock::now();
+  bUndo.set_sensitive(true);
+  bRedo.set_sensitive(true);
+  bDrapeaux.set_sensitive(true);
 }
 
 std::vector<Mine*> VueG::get_casesGrille(){
