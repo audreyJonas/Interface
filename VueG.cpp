@@ -21,11 +21,13 @@ VueG::VueG():
   Grille(false),
   boiteJoueur(false),
   Jeu(false),
-  avatarJoueur("./Avatars/yoshi.png"),
+  avatarJoueur(images[0]),
   bDrapeaux("Drapeaux"),
+  bAvatar("Changer Avatar"),
   bRestart("Nouvelle Partie"),
   bUndo(Gtk::Stock::GO_BACK),
-  bRedo(Gtk::Stock::GO_FORWARD)
+  bRedo(Gtk::Stock::GO_FORWARD),
+  it(images.begin()+1)
 {
   /*Creation des differents menus*/
   /*Barre de menu*/
@@ -50,8 +52,9 @@ VueG::VueG():
   boiteMenu.pack_start(barreMenu,Gtk::PACK_SHRINK);
   boiteMenu.pack_start(bUndo,Gtk::PACK_SHRINK);
   boiteMenu.pack_start(bRedo,Gtk::PACK_SHRINK);
+  boiteJoueur.pack_start(pseudoJoueur,Gtk::PACK_SHRINK);
   boiteJoueur.pack_start(avatarJoueur,Gtk::PACK_SHRINK);
-  boiteJoueur.pack_end(pseudoJoueur,Gtk::PACK_SHRINK);
+  boiteJoueur.pack_end(bAvatar,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteMenu,Gtk::PACK_SHRINK);
   Grille.pack_start(bDrapeaux);
   Grille.pack_start(GrilleJeu);
@@ -66,6 +69,7 @@ VueG::VueG():
   subItemQuitter.signal_activate().connect(sigc::mem_fun(*this,&VueG::close));
   subItemRegles.signal_activate().connect(sigc::mem_fun(*this,&VueG::afficherInstructions));
   subItemFichierScores.signal_activate().connect(sigc::mem_fun(*this,&VueG::afficherFichierScores));
+  bAvatar.signal_clicked().connect(sigc::mem_fun(*this,&VueG::changerAvatar));
   afficherPremierePage();
   afficherDialogue();
   afficherDifficulte();
@@ -119,7 +123,6 @@ void VueG::update(std::vector<std::string> &info, int& res){
       winInstruction.run();
     }
     else if(res==3){ //gagné en no_death_mode
-      std::cout<<"test"<<std::endl;
       Gtk::MessageDialog winInstruction(*this, "Vous avez Gagne", false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_OK);
       winInstruction.set_title("Fin du jeu");
       winInstruction.set_secondary_text("FELICITATIONS !!! N hesitez pas a rejouer en augmentant la difficulte.\n\n Souhaitez-vous enregistrer votre score?");
@@ -262,3 +265,8 @@ std::vector<Mine*> VueG::get_casesGrille(){
   return this->casesGrille;
 }
 
+void VueG::changerAvatar(){
+  if(it==images.end()) it=images.begin();
+  avatarJoueur.set(*it++);
+}
+  

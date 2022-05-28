@@ -43,7 +43,8 @@ public:
   std::string pseudo;
   std::chrono::_V2::steady_clock::time_point start;
   score_file score;
-
+  std::vector<std::string> images= {"./Avatars/yoshi.png","./Avatars/toad.png","./Avatars/luigi.png","./Avatars/mario.png","./Avatars/maskass.png","./Avatars/boo.png","./Avatars/birdo.png","./Avatars/peach.png"};
+  
 private:
   Gtk::MenuBar barreMenu;
   Gtk::MenuItem itemMenu,itemAide,itemParametres;
@@ -56,8 +57,9 @@ private:
   Gtk::Image avatarJoueur;
   Gtk::Grid GrilleJeu;
   Gtk::CheckButton bDrapeaux;
-  Gtk::Button bRestart,bUndo,bRedo;
+  Gtk::Button bAvatar,bRestart,bUndo,bRedo;
   std::vector<Mine*> casesGrille;
+  std::vector<std::string>::iterator it;
   
   
   
@@ -82,6 +84,7 @@ public:
   void addItemModeListener(Controleur* c);
   void resetGrille();
   std::vector<Mine*> get_casesGrille();
+  void changerAvatar();
   
 };
 
