@@ -35,7 +35,6 @@ void Demineur::poser_bombe(const int x, const int y){
         bomb_x = ((rand() % difficulte_)+1);
         bomb_y = ((rand() % difficulte_)+1);
 
-	//cout<<"Bomb x :" << bomb_x << "|Bomb y : " << bomb_y << endl;
 	if((Mon_jeu_[bomb_x][bomb_y].nb_bombe_ < je_suis_une_bombe) & !((bomb_x == (x+1)) & (bomb_y == (y+1)))){
           Mon_jeu_[bomb_x][bomb_y].nb_bombe_ = je_suis_une_bombe;
           for(int i=bomb_x-1; i<=bomb_x+1;++i){
@@ -49,7 +48,6 @@ void Demineur::poser_bombe(const int x, const int y){
         }
     }
 
-    //cout<<endl<<endl;
 };
 
 void Demineur::affichage() {
@@ -218,7 +216,8 @@ void Demineur::update(const int x, const int y){
 
 void Demineur::restart(){
   (this->Mon_jeu_).erase(this->Mon_jeu_.begin(),this->Mon_jeu_.end());
-  this->nb_case_decouvert_=0;  
+  this->nb_case_decouvert_=0;
+  this->game_history_.reset();
 };
 
 void Demineur::undo(){

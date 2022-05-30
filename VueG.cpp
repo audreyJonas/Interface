@@ -15,7 +15,6 @@ VueG::VueG():
   subItemQuitter(Gtk::Stock::CLOSE),
   subItemRegles(Gtk::Stock::HELP),
   subItemMode("Mode"),
-  // subItemDimensions("Dimensions"),
   boiteMenu(false),
   boiteJeu(false),
   Grille(false),
@@ -25,10 +24,14 @@ VueG::VueG():
   bDrapeaux("Drapeaux"),
   bAvatar("Changer Avatar"),
   bRestart("Nouvelle Partie"),
-  bUndo(Gtk::Stock::GO_BACK),
-  bRedo(Gtk::Stock::GO_FORWARD),
+  //bUndo(Gtk::Stock::GO_BACK),
+  //bRedo(Gtk::Stock::GO_FORWARD),
   it(images.begin()+1)
 {
+  auto undo = new Gtk::Image("./Icons/undo.png");
+  auto redo = new Gtk::Image("./Icons/redo.png");
+  bUndo.set_image(*undo);
+  bRedo.set_image(*redo);
   /*Creation des differents menus*/
   /*Barre de menu*/
   barreMenu.append(itemMenu);
@@ -45,23 +48,23 @@ VueG::VueG():
   Aide.append(subItemRegles);
   /*Sous items du menu deroulant Parametres*/
   Parametres.append(subItemMode);
-  //Parametres.append(subItemDimensions);
 
   /*Gestion des emplacements graphiques*/
   bDrapeaux.set_active(false);
   boiteMenu.pack_start(barreMenu,Gtk::PACK_SHRINK);
   boiteMenu.pack_start(bUndo,Gtk::PACK_SHRINK);
   boiteMenu.pack_start(bRedo,Gtk::PACK_SHRINK);
-  boiteJoueur.pack_start(pseudoJoueur,Gtk::PACK_SHRINK);
   boiteJoueur.pack_start(avatarJoueur,Gtk::PACK_SHRINK);
-  boiteJoueur.pack_end(bAvatar,Gtk::PACK_SHRINK);
+  boiteJoueur.pack_start(pseudoJoueur,Gtk::PACK_SHRINK);
+  boiteJoueur.pack_start(bAvatar,Gtk::PACK_SHRINK);
   Jeu.pack_start(boiteMenu,Gtk::PACK_SHRINK);
-  Grille.pack_start(bDrapeaux);
+  Grille.pack_start(boiteJoueur);
   Grille.pack_start(GrilleJeu);
-  boiteJeu.pack_end(boiteJoueur,Gtk::PACK_SHRINK);
-  Jeu.pack_end(bRestart,Gtk::PACK_SHRINK);
-  Jeu.pack_start(boiteJeu,Gtk::PACK_SHRINK);
+  //boiteJeu.pack_start(boiteJoueur,Gtk::PACK_SHRINK);
+  boiteMenu.pack_end(bDrapeaux,Gtk::PACK_SHRINK);
+  // Jeu.pack_start(boiteJeu,Gtk::PACK_SHRINK);
   Jeu.pack_start(Grille, Gtk::PACK_SHRINK);
+  Jeu.pack_end(bRestart,Gtk::PACK_SHRINK);
   add(Jeu);
 
   
@@ -135,7 +138,10 @@ void VueG::close(){
   Gtk::Window::close();
 }
 
-VueG::~VueG(){}
+VueG::~VueG(){
+  for(auto cases: casesGrille)
+    delete[] cases;
+}
 
 void VueG::afficherPremierePage() {
   //Création de la boîte de dialogue personnalisée.
@@ -171,9 +177,9 @@ void VueG::afficherDifficulte(){
   choix.run();
   int difficulte, bombes;
   switch(choix.getOption()){
-  case 1:difficulte=8;bombes=8;break;
-  case 2: difficulte=14;bombes=8;break;
-  case 3: difficulte=20;bombes=20;break;
+  case 1:difficulte=8;bombes=8;this->classic_game_mode=1;break;
+  case 2: difficulte=14;bombes=25;this->classic_game_mode=1;break;
+  case 3: difficulte=20;bombes=50;this->classic_game_mode=1;break;
   case 4: auto diff=afficherChoixDimensions(); difficulte=diff.first;bombes=diff.second;this->classic_game_mode=0;break;
   }
   this->Difficulte=difficulte;
@@ -203,7 +209,7 @@ void VueG::afficherFichierScores(){
 }
 
 std::pair<int,int> VueG::afficherChoixDimensions(){
-  dimWindow fenetre_dimensions(this,"Dimensions","Nombre de bombes",5,2,20,1);
+  dimWindow fenetre_dimensions(this,"Dimensions","Nombre de bombes",5,2,18,1);
   fenetre_dimensions.run();
   return make_pair(fenetre_dimensions.get_dim(),fenetre_dimensions.get_bombes());  
 }

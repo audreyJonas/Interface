@@ -12,7 +12,7 @@ int main(int argc,char * argv []) {
     Controleur *c = new Controleur(m,vg);
     m->ajouterObservateur(vg);
       
-    vg->set_default_size(700,600);
+    vg->set_default_size(600,500);
     vg->set_title("Jeu du Demineur");
     return app->run(*vg);
 }

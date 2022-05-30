@@ -47,12 +47,16 @@ public:
 
   void on_undo_button(){
     m->undo();
-    m->affichage();
+    if(!premier_coup){
+      m->affichage();
+    }
   }
   
   void on_redo_button(){
     m->redo();
-    m->affichage();
+    if(!premier_coup){
+      m->affichage();
+    }
   }
 
   void on_item_mode(){

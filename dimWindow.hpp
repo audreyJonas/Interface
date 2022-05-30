@@ -17,7 +17,7 @@ private :
   Gtk::SpinButton boutonDim_;
   Gtk::SpinButton boutonBombes_;
   int dim_=5;
-  int bomb_=24;
+  int bomb_=5;
   
 public :
   dimWindow(Gtk::Window* parent, std::string saisie1, std::string saisie2,  int defaut, int min,int max, int step):
